@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcVerse — 200+ Calculators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary:      #1a1a1a;
+    --primary-h:    #000000;
+    --bg:           #FFFFFF;
+    --bg-soft:      #F5F5F0;
+    --border-main:  #2d2d2d;
+    --border-light: #DDDDD8;
+    --text:         #111111;
+    --text-sub:     #3a3a3a;
+    --text-muted:   #7a7a72;
+    --font-body:    'Poppins', sans-serif;
+    --font-mono:    'JetBrains Mono', monospace;
+    --radius:       12px;
+    --shadow:       0 4px 24px rgba(0,0,0,0.06);
+    --shadow-hover: 0 12px 40px rgba(0,0,0,0.12);
+    --transition:   all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-soft); }
+  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 5vw;
+    height: 68px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: var(--transition);
+  }
+  .logo {
+    font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary);
+    display: flex; align-items: center; gap: 10px; text-decoration: none;
+  }
+  .logo-icon {
+    width: 36px; height: 36px; background: var(--primary); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); color: white; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: -1px;
+  }
+  nav { display: flex; gap: 36px; align-items: center; }
+  nav a { text-decoration: none; color: var(--text-muted); font-size: 0.875rem; font-weight: 500; transition: var(--transition); }
+  nav a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--primary); color: white !important;
+    padding: 10px 22px; border-radius: 8px; font-weight: 600;
+    transition: var(--transition);
+  }
+  .nav-cta:hover { background: var(--primary-h); transform: translateY(-1px); }
+  .menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+  .menu-btn span { display: block; width: 24px; height: 2px; background: var(--text); margin: 5px 0; border-radius: 2px; transition: var(--transition); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 5vw 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 70% 60% at 80% 50%, #f0f0ea 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 10% 80%, #e8e8e0 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: linear-gradient(var(--border-light) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 720px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg-soft); border: 1px solid var(--border-light);
+    padding: 6px 16px; border-radius: 100px;
+    font-size: 0.8rem; font-weight: 600; color: var(--text-sub);
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge span { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  h1 {
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px; color: var(--primary);
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 em { font-style: normal; position: relative; }
+  h1 em::after {
+    content: ''; position: absolute; bottom: 4px; left: 0; right: 0;
+    height: 4px; background: var(--primary); border-radius: 2px;
+    transform: scaleX(0); transform-origin: left;
+    animation: underlineGrow 0.8s 0.7s ease forwards;
+  }
+  @keyframes underlineGrow { to { transform: scaleX(1); } }
+  .hero-sub {
+    font-size: 1.125rem; color: var(--text-muted); max-width: 520px; line-height: 1.7;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+  .btn-primary {
+    background: var(--primary); color: white;
+    padding: 14px 32px; border-radius: 10px; border: none;
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: var(--transition);
+  }
+  .btn-primary:hover { background: var(--primary-h); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    padding: 14px 32px; border-radius: 10px; border: 1.5px solid var(--border-light);
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: var(--transition);
+  }
+  .btn-secondary:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .hero-stats {
+    margin-top: 64px; display: flex; gap: 48px; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .hero-stat { }
+  .hero-stat .num { font-size: 2rem; font-weight: 800; color: var(--primary); font-family: var(--font-mono); letter-spacing: -1px; }
+  .hero-stat .label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── FLOATING CARDS ── */
+  .hero-float {
+    position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
+    z-index: 1; display: flex; flex-direction: column; gap: 12px;
+    animation: floatIn 0.8s 0.5s ease both;
+  }
+  @keyframes floatIn { from{opacity:0;transform:translateY(-40%)} to{opacity:1;transform:translateY(-50%)} }
+  .float-card {
+    background: white; border: 1px solid var(--border-light);
+    border-radius: 12px; padding: 16px 20px; min-width: 220px;
+    box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 12px;
+    animation: float 4s ease-in-out infinite;
+  }
+  .float-card:nth-child(2) { animation-delay: -1.3s; transform: translateX(20px); }
+  .float-card:nth-child(3) { animation-delay: -2.6s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .float-icon { width: 40px; height: 40px; background: var(--bg-soft); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .float-label { font-size: 0.8rem; color: var(--text-muted); }
+  .float-val { font-size: 1rem; font-weight: 700; font-family: var(--font-mono); color: var(--text); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 100px 5vw; }
+  .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 16px; }
+  .section-title { font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -1px; color: var(--primary); margin-bottom: 16px; }
+  .section-sub { font-size: 1rem; color: var(--text-muted); max-width: 560px; line-height: 1.7; margin-bottom: 64px; }
+
+  /* ── FEATURES ── */
+  #features { background: var(--bg-soft); }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; }
+  .feature-card {
+    background: var(--bg); padding: 40px 36px;
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .feature-card:first-child { border-radius: 12px 0 0 0; }
+  .feature-card:nth-child(3) { border-radius: 0 12px 0 0; }
+  .feature-card:nth-last-child(3) { border-radius: 0 0 0 12px; }
+  .feature-card:last-child { border-radius: 0 0 12px 0; }
+  .feature-card:hover { background: var(--primary); transform: translateY(-4px); z-index: 1; box-shadow: var(--shadow-hover); }
+  .feature-card:hover .feature-icon, .feature-card:hover h3, .feature-card:hover p { color: white; }
+  .feature-card:hover .feature-icon-wrap { background: rgba(255,255,255,0.1); }
+  .feature-icon-wrap { width: 52px; height: 52px; background: var(--bg-soft); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; transition: var(--transition); }
+  .feature-icon { font-size: 1.5rem; }
+  .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; transition: var(--transition); }
+  .feature-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; transition: var(--transition); }
+
+  /* ── CATEGORIES ── */
+  #categories { }
+  .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 40px; }
+  .cat-tab {
+    padding: 8px 20px; border-radius: 8px; border: 1.5px solid var(--border-light);
+    background: transparent; font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; color: var(--text-muted); transition: var(--transition);
+  }
+  .cat-tab.active, .cat-tab:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  .cat-tab .count { font-family: var(--font-mono); font-size: 0.75rem; margin-left: 6px; opacity: 0.7; }
+
+  /* ── SEARCH ── */
+  .search-wrap { position: relative; margin-bottom: 40px; max-width: 480px; }
+  .search-wrap input {
+    width: 100%; padding: 14px 48px 14px 18px;
+    border: 1.5px solid var(--border-light); border-radius: 10px;
+    font-family: var(--font-body); font-size: 0.9rem; background: var(--bg-soft);
+    color: var(--text); outline: none; transition: var(--transition);
+  }
+  .search-wrap input:focus { border-color: var(--primary); background: white; }
+  .search-wrap::after {
+    content: '⌕'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 1.2rem; color: var(--text-muted); pointer-events: none;
+  }
+
+  /* ── CALCULATOR GRID ── */
+  .calc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .calc-card {
+    background: var(--bg); border: 1.5px solid var(--border-light);
+    border-radius: var(--radius); padding: 24px 22px;
+    cursor: pointer; transition: var(--transition);
+    display: flex; flex-direction: column; gap: 10px;
+    position: relative; overflow: hidden;
+  }
+  .calc-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--primary); transform: scaleX(0); transform-origin: left;
+    transition: var(--transition);
+  }
+  .calc-card:hover { border-color: var(--primary); box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+  .calc-card:hover::before { transform: scaleX(1); }
+  .calc-card-icon { font-size: 1.4rem; }
+  .calc-card-name { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .calc-card-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+  .calc-card-arrow { margin-top: auto; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--bg); border-radius: 16px; width: 100%; max-width: 540px;
+    max-height: 90vh; overflow-y: auto;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.15);
+    transform: translateY(20px); transition: transform 0.3s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    padding: 28px 28px 20px; border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  }
+  .modal-title-wrap {}
+  .modal-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+  .modal-cat { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .modal-close {
+    background: var(--bg-soft); border: none; width: 36px; height: 36px;
+    border-radius: 8px; cursor: pointer; font-size: 1.1rem; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition); color: var(--text-muted);
+  }
+  .modal-close:hover { background: var(--primary); color: white; }
+  .modal-body { padding: 28px; }
+  .calc-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-input {
+    padding: 12px 16px; border: 1.5px solid var(--border-light); border-radius: 8px;
+    font-family: var(--font-body); font-size: 0.95rem; color: var(--text);
+    background: var(--bg-soft); outline: none; transition: var(--transition);
+  }
+  .form-input:focus { border-color: var(--primary); background: white; }
+  .form-select {
+    padding: 12px 16px; border: 1.5px solid var(--border-light); border-radius: 8px;
+    font-family: var(--font-body); font-size: 0.95rem; color: var(--text);
+    background: var(--bg-soft); outline: none; transition: var(--transition); cursor: pointer;
+  }
+  .calc-btn {
+    background: var(--primary); color: white;
+    padding: 14px; border: none; border-radius: 10px;
+    font-family: var(--font-body); font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; transition: var(--transition); margin-top: 4px;
+  }
+  .calc-btn:hover { background: var(--primary-h); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .calc-result {
+    background: var(--bg-soft); border: 1.5px solid var(--border-light);
+    border-radius: 10px; padding: 20px; margin-top: 4px;
+    display: none;
+  }
+  .calc-result.show { display: block; animation: fadeUp 0.3s ease; }
+  .result-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+  .result-value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+  .result-detail { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; line-height: 1.6; }
+
+  /* ── HOW TO USE ── */
+  #how-to { background: var(--bg-soft); }
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; }
+  .step {
+    display: flex; flex-direction: column; gap: 16px;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .step.visible { opacity: 1; transform: translateY(0); }
+  .step-num {
+    width: 52px; height: 52px; border-radius: 12px;
+    background: var(--primary); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 1rem; font-weight: 700;
+  }
+  .step h3 { font-size: 1rem; font-weight: 700; color: var(--primary); }
+  .step p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* ── FOR WHOM ── */
+  #for-whom { }
+  .audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .audience-card {
+    padding: 32px 28px; border: 1.5px solid var(--border-light); border-radius: var(--radius);
+    transition: var(--transition); background: var(--bg);
+  }
+  .audience-card:hover { border-color: var(--primary); box-shadow: var(--shadow-hover); }
+  .audience-emoji { font-size: 2rem; margin-bottom: 16px; }
+  .audience-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
+  .audience-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── FAQ ── */
+  #faq { background: var(--bg-soft); }
+  .faq-list { max-width: 720px; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border-light); border-radius: var(--radius); overflow: hidden; }
+  .faq-item { border-bottom: 1px solid var(--border-light); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    width: 100%; text-align: left; background: white; border: none;
+    padding: 24px 28px; font-family: var(--font-body); font-size: 0.9rem; font-weight: 700;
+    color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    transition: var(--transition);
+  }
+  .faq-q:hover { background: var(--bg-soft); }
+  .faq-q .faq-icon { font-size: 1.2rem; color: var(--text-muted); transition: var(--transition); flex-shrink: 0; }
+  .faq-q.open .faq-icon { transform: rotate(45deg); color: var(--primary); }
+  .faq-a { background: var(--bg-soft); padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+  .faq-a.open { padding: 0 28px 24px; max-height: 400px; }
+  .faq-a p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.8; }
+
+  /* ── ABOUT ── */
+  #about { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-visual {
+    position: relative; height: 420px; background: var(--bg-soft);
+    border-radius: 16px; border: 1px solid var(--border-light); overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-ticker {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    line-height: 1.8; padding: 24px; user-select: none;
+  }
+  .ticker-line { display: block; animation: ticker 8s linear infinite; opacity: 0.6; }
+  .ticker-highlight { color: var(--primary); font-weight: 700; opacity: 1; }
+  .about-text .section-sub { margin-bottom: 32px; }
+  .about-vals { display: flex; flex-direction: column; gap: 16px; }
+  .about-val { display: flex; align-items: center; gap: 12px; font-size: 0.875rem; color: var(--text-sub); font-weight: 500; }
+  .about-val::before { content: '✓'; width: 24px; height: 24px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; flex-shrink: 0; }
+
+  /* ── CTA BANNER ── */
+  #cta {
+    background: var(--primary); color: white;
+    text-align: center; padding: 100px 5vw;
+  }
+  #cta .section-label { color: rgba(255,255,255,0.5); }
+  #cta .section-title { color: white; margin-bottom: 20px; }
+  #cta .section-sub { color: rgba(255,255,255,0.6); max-width: 480px; margin: 0 auto 40px; }
+  #cta .btn-primary { background: white; color: var(--primary); }
+  #cta .btn-primary:hover { background: var(--bg-soft); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--primary-h); color: rgba(255,255,255,0.6);
+    padding: 60px 5vw 40px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-brand .logo { color: white; margin-bottom: 16px; display: inline-flex; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; max-width: 260px; }
+  .footer-col h4 { color: white; font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+  .footer-col a { display: block; text-decoration: none; color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-bottom: 10px; transition: var(--transition); }
+  .footer-col a:hover { color: white; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; }
+  .footer-bottom p { font-size: 0.8rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-float { display: none; }
+    #about { grid-template-columns: 1fr; }
+    .about-visual { height: 240px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    nav { display: none; }
+    nav.open { display: flex; flex-direction: column; position: fixed; top: 68px; left: 0; right: 0; background: white; border-bottom: 1px solid var(--border-light); padding: 24px 5vw; gap: 20px; z-index: 99; }
+    .menu-btn { display: block; }
+  }
+  @media (max-width: 600px) {
+    h1 { letter-spacing: -1px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    section { padding: 72px 5vw; }
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 300;
+    background: var(--primary); color: white;
+    padding: 14px 24px; border-radius: 10px; font-size: 0.875rem; font-weight: 600;
+    transform: translateY(80px); opacity: 0; transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── NO RESULTS ── */
+  .no-results { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted); }
+  .no-results .num { font-family: var(--font-mono); font-size: 3rem; color: var(--border-light); display: block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a href="#" class="logo">
+    <div class="logo-icon">∑</div>
+    CalcVerse
+  </a>
+  <nav id="nav">
+    <a href="#features">Features</a>
+    <a href="#categories">Calculators</a>
+    <a href="#how-to">How It Works</a>
+    <a href="#faq">FAQ</a>
+    <a href="#categories" class="nav-cta">Launch App</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Free & No Sign-Up Required</div>
+    <h1>Every Calculator<br>You'll Ever <em>Need</em></h1>
+    <p class="hero-sub">200+ precision calculators for math, science, finance, health, and daily life — beautifully designed, blazing fast, entirely free.</p>
+    <div class="hero-actions">
+      <a href="#categories" class="btn-primary">Explore Calculators ↓</a>
+      <a href="#how-to" class="btn-secondary">How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">220+</div><div class="label">Calculators</div></div>
+      <div class="hero-stat"><div class="num">7</div><div class="label">Categories</div></div>
+      <div class="hero-stat"><div class="num">100%</div><div class="label">Free Forever</div></div>
+      <div class="hero-stat"><div class="num">0</div><div class="label">Sign-ups</div></div>
+    </div>
+  </div>
+  <div class="hero-float">
+    <div class="float-card">
+      <div class="float-icon">📐</div>
+      <div><div class="float-label">Pythagorean Theorem</div><div class="float-val">c = √(a² + b²)</div></div>
+    </div>
+    <div class="float-card">
+      <div class="float-icon">💰</div>
+      <div><div class="float-label">Compound Interest</div><div class="float-val">A = P(1 + r/n)ⁿᵗ</div></div>
+    </div>
+    <div class="float-card">
+      <div class="float-icon">🧪</div>
+      <div><div class="float-label">pH Level</div><div class="float-val">pH = −log[H⁺]</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">Why CalcVerse</div>
+  <h2 class="section-title">Built for precision.<br>Designed for everyone.</h2>
+  <p class="section-sub">From students to engineers, we've crafted every calculator with clarity, accuracy, and simplicity at the core.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon-wrap"><div class="feature-icon">⚡</div></div>
+      <h3>Instant Results</h3>
+      <p>No loading screens, no ads, no distractions. Get your answer the moment you need it.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon-wrap"><div class="feature-icon">🎯</div></div>
+      <h3>Precision Accurate</h3>
+      <p>All calculators use high-precision algorithms validated against industry standards.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon-wrap"><div class="feature-icon">🔍</div></div>
+      <h3>Smart Search</h3>
+      <p>Find any calculator in under 2 seconds with our intelligent real-time search system.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon-wrap"><div class="feature-icon">📱</div></div>
+      <h3>Fully Responsive</h3>
+      <p>Works flawlessly on desktop, tablet, and mobile — no app download required.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon-wrap"><div class="feature-icon">🔒</div></div>
+      <h3>No Data Collected</h3>
+      <p>All calculations run in your browser. We never store, share, or monetize your data.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon-wrap"><div class="feature-icon">🌐</div></div>
+      <h3>Always Free</h3>
+      <p>Every single calculator, available forever, completely free. No subscriptions, no paywalls.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATORS -->
+<section id="categories">
+  <div class="section-label">220+ Tools</div>
+  <h2 class="section-title">Find Your Calculator</h2>
+  <p class="section-sub">Browse all categories or use the search to find any calculator instantly.</p>
+
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search calculators…" autocomplete="off">
+  </div>
+
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active" data-cat="all">All <span class="count">220</span></button>
+    <button class="cat-tab" data-cat="math">Mathematics <span class="count">45</span></button>
+    <button class="cat-tab" data-cat="stats">Statistics <span class="count">30</span></button>
+    <button class="cat-tab" data-cat="geo">Geometry <span class="count">35</span></button>
+    <button class="cat-tab" data-cat="physics">Physics <span class="count">35</span></button>
+    <button class="cat-tab" data-cat="chem">Chemistry <span class="count">30</span></button>
+    <button class="cat-tab" data-cat="comp">Computer <span class="count">20</span></button>
+    <button class="cat-tab" data-cat="finance">Finance & Life <span class="count">25</span></button>
+  </div>
+
+  <div class="calc-grid" id="calcGrid"></div>
+</section>
+
+<!-- HOW TO USE -->
+<section id="how-to">
+  <div class="section-label">Getting Started</div>
+  <h2 class="section-title">Three steps.<br>Any answer.</h2>
+  <p class="section-sub">CalcVerse is designed to be intuitive. No manual needed — but here's a quick guide anyway.</p>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Search or Browse</h3>
+      <p>Use the search bar to instantly find your calculator by name, or browse our 7 organized categories: Math, Statistics, Geometry, Physics, Chemistry, Computer Science, and Finance.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Enter Your Values</h3>
+      <p>Click on any calculator to open it. Fill in the clearly labeled input fields. Each calculator has smart defaults and helpful labels to guide you.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Get Your Answer</h3>
+      <p>Hit Calculate and see your result instantly, displayed with clear formatting. Many calculators also show the formula and step-by-step breakdown.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Copy or Continue</h3>
+      <p>Copy your result with one click, or keep refining your inputs. All calculators remember your last values within the session.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section id="for-whom">
+  <div class="section-label">Our Users</div>
+  <h2 class="section-title">Built for everyone<br>who needs answers.</h2>
+  <p class="section-sub">Whether you're cramming for an exam or closing a financial model, CalcVerse has you covered.</p>
+  <div class="audience-grid">
+    <div class="audience-card">
+      <div class="audience-emoji">🎓</div>
+      <h3>Students</h3>
+      <p>Tackle homework, verify textbook answers, and explore mathematical concepts with step-by-step results.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-emoji">🔬</div>
+      <h3>Scientists & Researchers</h3>
+      <p>Run chemical, physical, and statistical calculations with precision. From pH to Fourier transforms.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-emoji">🏗️</div>
+      <h3>Engineers</h3>
+      <p>Quickly calculate forces, torques, pressures, and electrical values in the field or at your desk.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-emoji">💼</div>
+      <h3>Finance Professionals</h3>
+      <p>Crunch EMI, ROI, compound interest, and tax figures accurately without firing up a spreadsheet.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-emoji">👨‍💻</div>
+      <h3>Developers</h3>
+      <p>Convert between binary, hex, and octal; check logic gates; compute hash values and bitwise ops.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-emoji">🏠</div>
+      <h3>Everyday Users</h3>
+      <p>Calculate BMI, calories, fuel costs, age, tips, and more for everyday decisions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="padding:100px 5vw;">
+  <div class="about-visual">
+    <pre class="about-ticker"><span class="ticker-line">f(x) = ∫₀^∞ e^(−x²) dx = √π/2</span>
+<span class="ticker-line ticker-highlight">▸ CalcVerse — 220+ Calculators</span>
+<span class="ticker-line">E = mc²  ·  F = ma  ·  PV = nRT</span>
+<span class="ticker-line">pH = −log₁₀[H⁺]</span>
+<span class="ticker-line ticker-highlight">▸ 100% browser-based. Zero data stored.</span>
+<span class="ticker-line">nCr = n! / (r!(n−r)!)</span>
+<span class="ticker-line">χ² = Σ (O−E)²/E</span>
+<span class="ticker-line ticker-highlight">▸ Precision ↗ Simplicity ↗ Speed</span>
+<span class="ticker-line">A = P(1 + r/n)^(nt)</span>
+<span class="ticker-line">sin²θ + cos²θ = 1</span>
+<span class="ticker-line ticker-highlight">▸ Free forever. No signup required.</span>
+<span class="ticker-line">V = (4/3)πr³</span>
+<span class="ticker-line">σ = √(Σ(x−μ)²/N)</span></pre>
+  </div>
+  <div class="about-text">
+    <div class="section-label">About CalcVerse</div>
+    <h2 class="section-title">Your all-in-one calculation universe</h2>
+    <p class="section-sub">CalcVerse was born from a simple frustration: finding a reliable, clean, and free calculator for anything beyond basic arithmetic was surprisingly hard. So we built one — for everything.</p>
+    <div class="about-vals">
+      <div class="about-val">220+ fully functional calculators in one place</div>
+      <div class="about-val">All computations run client-side — no servers, no logs</div>
+      <div class="about-val">Continuously updated with new tools and categories</div>
+      <div class="about-val">Validated formulas cross-referenced with academic sources</div>
+      <div class="about-val">Accessible design, keyboard navigable, screen reader friendly</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">Common Questions</h2>
+  <p class="section-sub">Everything you need to know about CalcVerse.</p>
+  <div class="faq-list" id="faqList">
+    <div class="faq-item">
+      <button class="faq-q" data-faq="0">Is CalcVerse really free? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-0"><p>Yes — completely. All 220+ calculators are free, forever. There are no premium tiers, no paywalls, and no subscription fees. CalcVerse is funded by a passion for making tools accessible to everyone.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" data-faq="1">Do I need to create an account? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-1"><p>Absolutely not. Open the page and start calculating. No email, no password, no verification. We believe access to mathematical tools should have zero friction.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" data-faq="2">Are the formulas accurate? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-2"><p>Yes. Every calculator uses rigorously validated formulas sourced from academic textbooks, engineering standards, and scientific literature. We cross-reference results with known verified values during development.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" data-faq="3">Do you store my calculation data? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-3"><p>Never. All calculations run 100% in your browser using JavaScript. No data is sent to any server. We don't even use analytics cookies. Your numbers stay completely private.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" data-faq="4">Can I use CalcVerse offline? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-4"><p>Once the page is loaded, most calculators will continue to work even if you lose internet connection, since all logic is client-side. For the best experience, load the page with a connection first.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" data-faq="5">How do I request a new calculator? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-5"><p>We love suggestions! Use the feedback button at the bottom of the page to submit your request. We review all suggestions and prioritize based on community demand. Many of our best calculators came from user requests.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" data-faq="6">Is CalcVerse mobile-friendly? <span class="faq-icon">+</span></button>
+      <div class="faq-a" id="faq-6"><p>Absolutely. CalcVerse is designed mobile-first. Every calculator is touch-friendly, the layouts adapt perfectly to all screen sizes, and keyboard inputs are optimized for mobile use.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-label">Get Started Now</div>
+  <h2 class="section-title">Your answer is one click away.</h2>
+  <p class="section-sub">Join millions of students, engineers, and professionals who use CalcVerse every day.</p>
+  <a href="#categories" class="btn-primary">Browse All 220+ Calculators →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo"><div class="logo-icon">∑</div> CalcVerse</a>
+      <p>The most comprehensive free calculator platform on the web. 220+ tools, zero sign-ups, forever free.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Calculators</h4>
+      <a href="#categories">Mathematics</a>
+      <a href="#categories">Statistics</a>
+      <a href="#categories">Geometry</a>
+      <a href="#categories">Physics</a>
+      <a href="#categories">Chemistry</a>
+      <a href="#categories">Computer Science</a>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#how-to">How It Works</a>
+      <a href="#for-whom">Who It's For</a>
+      <a href="#faq">FAQ</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="footer-col">
+      <h4>More</h4>
+      <a href="#" onclick="openPage('privacy');return false;">Privacy Policy</a>
+      <a href="#" onclick="openPage('terms');return false;">Terms of Use</a>
+      <a href="#" onclick="openPage('feedback');return false;">Feedback</a>
+      <a href="#" onclick="openPage('feedback');return false;">Request a Calculator</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 CalcVerse.Made by-AMANXR. Built with precision and care.</p>
+    <p>Made for learners, by learners.</p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalEl">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <div class="modal-icon" id="mIcon"></div>
+        <div class="modal-title" id="mTitle"></div>
+        <div class="modal-cat" id="mCat"></div>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Result copied!</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+const calcs = [
+  // MATHEMATICS
+  {id:'basic',name:'Basic Calculator',icon:'🔢',cat:'math',desc:'Add, subtract, multiply, divide',fields:[{l:'Expression',k:'expr',ph:'e.g. 12 * (5 + 3)'}],fn(v){try{return {val:eval(v.expr.replace(/[^0-9+\-*/.() ]/g,'')),det:'Enter any arithmetic expression'};}catch{return null;}},fmla:'Standard arithmetic'},
+  {id:'pct',name:'Percentage Calculator',icon:'%',cat:'math',desc:'Calculate percentages & changes',fields:[{l:'Value',k:'val',ph:'100'},{l:'Percentage (%)',k:'pct',ph:'15'}],fn(v){const r=+v.val*(+v.pct/100);return {val:r.toFixed(4),det:`${v.pct}% of ${v.val} = ${r}\nNew value: ${(+v.val+r).toFixed(4)}`}},fmla:'P% of X = X × P/100'},
+  {id:'sqrt',name:'Square Root',icon:'√',cat:'math',desc:'Compute √x',fields:[{l:'Number',k:'x',ph:'144'}],fn(v){if(+v.x<0)return null;return {val:Math.sqrt(+v.x).toFixed(8),det:`√${v.x} = ${Math.sqrt(+v.x).toFixed(8)}`}},fmla:'√x'},
+  {id:'cbrt',name:'Cube Root',icon:'∛',cat:'math',desc:'Compute ∛x',fields:[{l:'Number',k:'x',ph:'27'}],fn(v){return {val:Math.cbrt(+v.x).toFixed(8),det:`∛${v.x} = ${Math.cbrt(+v.x).toFixed(8)}`}},fmla:'∛x'},
+  {id:'pow',name:'Power Calculator',icon:'xʸ',cat:'math',desc:'Calculate xʸ',fields:[{l:'Base (x)',k:'x',ph:'2'},{l:'Exponent (y)',k:'y',ph:'10'}],fn(v){return {val:Math.pow(+v.x,+v.y),det:`${v.x}^${v.y} = ${Math.pow(+v.x,+v.y)}`}},fmla:'xʸ'},
+  {id:'fact',name:'Factorial',icon:'n!',cat:'math',desc:'Compute n!',fields:[{l:'n (0-170)',k:'n',ph:'10'}],fn(v){let n=+v.n,r=1;if(n<0||n>170)return null;for(let i=2;i<=n;i++)r*=i;return {val:r,det:`${n}! = ${r}`}},fmla:'n! = n × (n−1) × … × 1'},
+  {id:'prime',name:'Prime Checker',icon:'🔍',cat:'math',desc:'Check if a number is prime',fields:[{l:'Number',k:'n',ph:'97'}],fn(v){let n=+v.n;if(n<2)return{val:'Not Prime',det:`${n} is not prime`};for(let i=2;i<=Math.sqrt(n);i++)if(n%i===0)return{val:'Not Prime',det:`${n} is divisible by ${i}`};return{val:'Prime ✓',det:`${n} is a prime number`}},fmla:'Trial division'},
+  {id:'gcd',name:'GCD / HCF',icon:'⊕',cat:'math',desc:'Greatest common divisor',fields:[{l:'Number A',k:'a',ph:'48'},{l:'Number B',k:'b',ph:'18'}],fn(v){let a=Math.abs(+v.a),b=Math.abs(+v.b);while(b){[a,b]=[b,a%b]}return{val:a,det:`GCD(${v.a}, ${v.b}) = ${a}`}},fmla:'Euclidean Algorithm'},
+  {id:'lcm',name:'LCM Calculator',icon:'⊗',cat:'math',desc:'Least common multiple',fields:[{l:'Number A',k:'a',ph:'12'},{l:'Number B',k:'b',ph:'18'}],fn(v){let a=Math.abs(+v.a),b=Math.abs(+v.b),oa=a,ob=b;while(b){[a,b]=[b,a%b]}const g=a;return{val:(oa*ob)/g,det:`LCM(${v.a}, ${v.b}) = ${(oa*ob)/g}`}},fmla:'LCM = |a×b| / GCD(a,b)'},
+  {id:'avg',name:'Average (Mean)',icon:'x̄',cat:'math',desc:'Mean of a list of numbers',fields:[{l:'Numbers (comma-separated)',k:'nums',ph:'4, 8, 15, 16, 23, 42'}],fn(v){const arr=v.nums.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n));if(!arr.length)return null;const s=arr.reduce((a,b)=>a+b,0);return{val:(s/arr.length).toFixed(6),det:`Sum = ${s}\nCount = ${arr.length}\nMean = ${(s/arr.length).toFixed(6)}`}},fmla:'x̄ = Σx / n'},
+  {id:'log',name:'Log Calculator',icon:'㏒',cat:'math',desc:'Logarithm with any base',fields:[{l:'Number',k:'x',ph:'100'},{l:'Base',k:'b',ph:'10'}],fn(v){const r=Math.log(+v.x)/Math.log(+v.b);return{val:r.toFixed(8),det:`log_${v.b}(${v.x}) = ${r.toFixed(8)}`}},fmla:'logₐ(x) = ln(x)/ln(a)'},
+  {id:'antilog',name:'Antilog Calculator',icon:'10ˣ',cat:'math',desc:'Reverse logarithm',fields:[{l:'Log value (x)',k:'x',ph:'2'},{l:'Base',k:'b',ph:'10'}],fn(v){const r=Math.pow(+v.b,+v.x);return{val:r.toFixed(8),det:`${v.b}^${v.x} = ${r.toFixed(8)}`}},fmla:'aⁿ = result'},
+  {id:'abs',name:'Absolute Value',icon:'|x|',cat:'math',desc:'|x| for any number',fields:[{l:'Number',k:'x',ph:'-42'}],fn(v){return{val:Math.abs(+v.x),det:`|${v.x}| = ${Math.abs(+v.x)}`}},fmla:'|x|'},
+  {id:'mod',name:'Modulus (Remainder)',icon:'mod',cat:'math',desc:'a mod b',fields:[{l:'Dividend (a)',k:'a',ph:'17'},{l:'Divisor (b)',k:'b',ph:'5'}],fn(v){return{val:+v.a%+v.b,det:`${v.a} mod ${v.b} = ${+v.a%+v.b}`}},fmla:'a mod b'},
+  {id:'round',name:'Rounding',icon:'≈',cat:'math',desc:'Round to decimal places',fields:[{l:'Number',k:'x',ph:'3.14159265'},{l:'Decimal places',k:'d',ph:'2'}],fn(v){const f=Math.pow(10,+v.d);return{val:(Math.round(+v.x*f)/f).toFixed(+v.d),det:`${v.x} rounded to ${v.d} decimal places`}},fmla:'round(x, d)'},
+  {id:'perm',name:'Permutation nPr',icon:'nPr',cat:'math',desc:'Ordered arrangements',fields:[{l:'n (total)',k:'n',ph:'10'},{l:'r (choose)',k:'r',ph:'3'}],fn(v){let n=+v.n,r=+v.r;if(r>n)return null;let res=1;for(let i=n;i>n-r;i--)res*=i;return{val:res,det:`P(${n},${r}) = ${res}`}},fmla:'nPr = n! / (n−r)!'},
+  {id:'comb',name:'Combination nCr',icon:'nCr',cat:'math',desc:'Unordered selections',fields:[{l:'n (total)',k:'n',ph:'10'},{l:'r (choose)',k:'r',ph:'3'}],fn(v){let n=+v.n,r=+v.r;if(r>n)return null;let num=1,den=1;for(let i=0;i<r;i++){num*=(n-i);den*=(i+1);}return{val:num/den,det:`C(${n},${r}) = ${num/den}`}},fmla:'nCr = n! / (r!(n−r)!)'},
+  {id:'quad',name:'Quadratic Solver',icon:'ax²',cat:'math',desc:'Solve ax² + bx + c = 0',fields:[{l:'a',k:'a',ph:'1'},{l:'b',k:'b',ph:'-5'},{l:'c',k:'c',ph:'6'}],fn(v){let a=+v.a,b=+v.b,c=+v.c,disc=b*b-4*a*c;if(disc<0)return{val:'Complex roots',det:`Δ = ${disc} < 0\nx = (${-b} ± ${Math.sqrt(-disc).toFixed(4)}i) / ${2*a}`};let x1=(-b+Math.sqrt(disc))/(2*a),x2=(-b-Math.sqrt(disc))/(2*a);return{val:`x₁ = ${x1.toFixed(6)}`,det:`x₁ = ${x1.toFixed(6)}\nx₂ = ${x2.toFixed(6)}\nΔ = ${disc}`}},fmla:'x = (−b ± √(b²−4ac)) / 2a'},
+  {id:'slope',name:'Slope Calculator',icon:'📈',cat:'math',desc:'Slope between two points',fields:[{l:'x₁',k:'x1',ph:'0'},{l:'y₁',k:'y1',ph:'0'},{l:'x₂',k:'x2',ph:'4'},{l:'y₂',k:'y2',ph:'8'}],fn(v){if(+v.x2===+v.x1)return{val:'Undefined',det:'Vertical line — slope is undefined'};const m=(+v.y2-+v.y1)/(+v.x2-+v.x1);return{val:m.toFixed(6),det:`m = (${v.y2}−${v.y1}) / (${v.x2}−${v.x1}) = ${m.toFixed(6)}`}},fmla:'m = (y₂−y₁) / (x₂−x₁)'},
+  {id:'midpt',name:'Midpoint Calculator',icon:'↔',cat:'math',desc:'Midpoint of two points',fields:[{l:'x₁',k:'x1',ph:'2'},{l:'y₁',k:'y1',ph:'4'},{l:'x₂',k:'x2',ph:'8'},{l:'y₂',k:'y2',ph:'10'}],fn(v){return{val:`(${((+v.x1+ +v.x2)/2).toFixed(4)}, ${((+v.y1+ +v.y2)/2).toFixed(4)})`,det:`Midpoint = ((${v.x1}+${v.x2})/2, (${v.y1}+${v.y2})/2)`}},fmla:'M = ((x₁+x₂)/2, (y₁+y₂)/2)'},
+  {id:'dist2d',name:'Distance (2D)',icon:'📏',cat:'math',desc:'Distance between two points',fields:[{l:'x₁',k:'x1',ph:'0'},{l:'y₁',k:'y1',ph:'0'},{l:'x₂',k:'x2',ph:'3'},{l:'y₂',k:'y2',ph:'4'}],fn(v){const d=Math.sqrt(Math.pow(+v.x2-+v.x1,2)+Math.pow(+v.y2-+v.y1,2));return{val:d.toFixed(8),det:`d = √((${v.x2}−${v.x1})² + (${v.y2}−${v.y1})²) = ${d.toFixed(8)}`}},fmla:'d = √((x₂−x₁)² + (y₂−y₁)²)'},
+  {id:'ratio',name:'Ratio Simplifier',icon:'∶',cat:'math',desc:'Simplify a:b ratios',fields:[{l:'a',k:'a',ph:'12'},{l:'b',k:'b',ph:'18'}],fn(v){let a=Math.abs(+v.a),b=Math.abs(+v.b),oa=a,ob=b;while(b){[a,b]=[b,a%b]}return{val:`${oa/a} : ${ob/a}`,det:`${oa}:${ob} simplified = ${oa/a}:${ob/a}`}},fmla:'Divide by GCD'},
+  {id:'frac',name:'Fraction Calculator',icon:'½',cat:'math',desc:'Add, subtract fractions',fields:[{l:'Numerator 1',k:'n1',ph:'1'},{l:'Denominator 1',k:'d1',ph:'2'},{l:'Numerator 2',k:'n2',ph:'1'},{l:'Denominator 2',k:'d2',ph:'3'},{l:'Operation',k:'op',ph:'+ or -'}],fn(v){const [n1,d1,n2,d2]=[+v.n1,+v.d1,+v.n2,+v.d2];let rn,rd=d1*d2,op=v.op.trim();if(op==='+')rn=n1*d2+n2*d1;else if(op==='-')rn=n1*d2-n2*d1;else if(op==='*')return{val:`${n1*n2}/${d1*d2}`,det:`${n1}/${d1} × ${n2}/${d2}`};else if(op==='/')return{val:`${n1*d2}/${d1*n2}`,det:`${n1}/${d1} ÷ ${n2}/${d2}`};else rn=n1*d2+n2*d1;let g=rd,t=Math.abs(rn);while(t){[g,t]=[t,g%t]}return{val:`${rn/g}/${rd/g}`,det:`${n1}/${d1} ${op} ${n2}/${d2} = ${rn/g}/${rd/g} (${(rn/rd).toFixed(6)} decimal)`}},fmla:'a/b ± c/d = (ad ± bc)/(bd)'},
+  {id:'evenodd',name:'Even / Odd',icon:'2n',cat:'math',desc:'Check parity of a number',fields:[{l:'Number',k:'n',ph:'42'}],fn(v){const n=Math.floor(+v.n);return{val:n%2===0?'Even':'Odd',det:`${n} is ${n%2===0?'even (divisible by 2)':'odd (not divisible by 2)'}`}},fmla:'n mod 2 = 0 → Even'},
+  {id:'deriv',name:'Derivative Helper',icon:'d/dx',cat:'math',desc:'Basic polynomial derivatives',fields:[{l:'Coefficient (a)',k:'a',ph:'3'},{l:'Power (n)',k:'n',ph:'4'}],fn(v){const a=+v.a,n=+v.n;const na=a*n,nn=n-1;return{val:`${na}x^${nn}`,det:`d/dx[${a}x^${n}] = ${na}x^${nn}\nUsing power rule: d/dx[axⁿ] = anx^(n−1)`}},fmla:'d/dx[axⁿ] = anx^(n−1)'},
+  {id:'integral',name:'Integral Helper',icon:'∫',cat:'math',desc:'Basic polynomial integration',fields:[{l:'Coefficient (a)',k:'a',ph:'3'},{l:'Power (n)',k:'n',ph:'2'}],fn(v){const a=+v.a,n=+v.n;if(n===-1)return{val:`${a}ln|x| + C`,det:'∫(a/x)dx = a·ln|x| + C'};const na=(a/(n+1)).toFixed(4),nn=n+1;return{val:`${na}x^${nn} + C`,det:`∫${a}x^${n}dx = ${na}x^${nn} + C`}},fmla:'∫axⁿdx = ax^(n+1)/(n+1) + C'},
+  {id:'complnum',name:'Complex Number',icon:'ℂ',cat:'math',desc:'Operations with complex numbers',fields:[{l:'Real part (a)',k:'a',ph:'3'},{l:'Imaginary (b)',k:'b',ph:'4'}],fn(v){const a=+v.a,b=+v.b;return{val:`${a} + ${b}i`,det:`Modulus |z| = ${Math.sqrt(a*a+b*b).toFixed(6)}\nArgument θ = ${(Math.atan2(b,a)*180/Math.PI).toFixed(4)}°\nConjugate = ${a} − ${b}i`}},fmla:'z = a + bi, |z| = √(a²+b²)'},
+  {id:'vec',name:'Vector Operations',icon:'→',cat:'math',desc:'2D vector dot product & magnitude',fields:[{l:'x₁',k:'x1',ph:'3'},{l:'y₁',k:'y1',ph:'4'},{l:'x₂',k:'x2',ph:'1'},{l:'y₂',k:'y2',ph:'2'}],fn(v){const dot=+v.x1*+v.x2+ +v.y1*+v.y2,m1=Math.sqrt(Number(v.x1)**2+ Number(v.y1)**2),m2=Math.sqrt(Number(v.x2)**2+ Number(v.y2)**2);return{val:`Dot = ${dot}`,det:`|v₁| = ${m1.toFixed(4)}\n|v₂| = ${m2.toFixed(4)}\nDot Product = ${dot}\nAngle = ${(Math.acos(dot/(m1*m2))*180/Math.PI).toFixed(4)}°`}},fmla:'v₁·v₂ = x₁x₂ + y₁y₂'},
+  {id:'limit',name:'Limit Calculator',icon:'lim',cat:'math',desc:'Limit of ax/x type functions',fields:[{l:'Numerator coeff (a)',k:'a',ph:'2'},{l:'Denominator coeff (b)',k:'b',ph:'3'},{l:'As x → ',k:'x',ph:'0'}],fn(v){const r=+v.a/+v.b;return{val:r.toFixed(6),det:`lim(x→${v.x}) ${v.a}x / ${v.b}x = ${v.a}/${v.b} = ${r.toFixed(6)}`}},fmla:'L\'Hôpital / simplification'},
+  {id:'matrix2',name:'2×2 Matrix Ops',icon:'⊞',cat:'math',desc:'Determinant & inverse',fields:[{l:'a',k:'a',ph:'4'},{l:'b',k:'b',ph:'7'},{l:'c',k:'c',ph:'2'},{l:'d',k:'d',ph:'6'}],fn(v){const [a,b,c,d]=[+v.a,+v.b,+v.c,+v.d],det=a*d-b*c;if(det===0)return{val:'Singular matrix',det:'Determinant = 0, no inverse'};return{val:`det = ${det}`,det:`Determinant = ${a*d}−${b*c} = ${det}\nInverse = [${d/det}, ${-b/det}; ${-c/det}, ${a/det}]`}},fmla:'det = ad − bc'},
+  {id:'taylor',name:'Taylor Series (eˣ)',icon:'eˣ',cat:'math',desc:'eˣ approximation via Taylor',fields:[{l:'x',k:'x',ph:'1'},{l:'Terms (n)',k:'n',ph:'10'}],fn(v){let s=0,x=+v.x,fact=1;for(let i=0;i<+v.n;i++){if(i>0)fact*=i;s+=Math.pow(x,i)/fact;}return{val:s.toFixed(10),det:`Exact eˣ = ${Math.exp(x).toFixed(10)}\nApprox = ${s.toFixed(10)}\nError = ${Math.abs(Math.exp(x)-s).toExponential(4)}`}},fmla:'eˣ = Σ xⁿ/n!'},
+  {id:'laplace',name:'Laplace (simple)',icon:'ℒ',cat:'math',desc:'L{e^at} = 1/(s-a)',fields:[{l:'a (in e^at)',k:'a',ph:'3'},{l:'s value',k:'s',ph:'5'}],fn(v){const a=+v.a,s=+v.s;if(s<=a)return null;const r=1/(s-a);return{val:r.toFixed(8),det:`ℒ{e^${a}t}(s=${s}) = 1/(${s}−${a}) = ${r.toFixed(8)}`}},fmla:'ℒ{e^at} = 1/(s−a), s>a'},
+
+  // STATISTICS
+  {id:'median',name:'Median Calculator',icon:'📊',cat:'stats',desc:'Middle value of a dataset',fields:[{l:'Numbers (comma-separated)',k:'n',ph:'3, 1, 4, 1, 5, 9, 2'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n)).sort((a,b)=>a-b);const m=arr.length%2===0?(arr[arr.length/2-1]+arr[arr.length/2])/2:arr[Math.floor(arr.length/2)];return{val:m,det:`Sorted: [${arr.join(', ')}]\nMedian = ${m}`}},fmla:'Middle value of sorted data'},
+  {id:'mode',name:'Mode Calculator',icon:'📈',cat:'stats',desc:'Most frequent value',fields:[{l:'Numbers (comma-separated)',k:'n',ph:'1, 2, 2, 3, 3, 3, 4'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n));const freq={};arr.forEach(x=>{freq[x]=(freq[x]||0)+1;});const max=Math.max(...Object.values(freq));const modes=Object.keys(freq).filter(k=>freq[k]===max);return{val:modes.join(', '),det:`Mode(s) = ${modes.join(', ')}\nFrequency = ${max}`}},fmla:'Most frequent value'},
+  {id:'variance',name:'Variance',icon:'σ²',cat:'stats',desc:'Population variance',fields:[{l:'Numbers (comma-separated)',k:'n',ph:'2, 4, 4, 4, 5, 5, 7, 9'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n));const m=arr.reduce((a,b)=>a+b,0)/arr.length;const va=arr.reduce((s,x)=>s+(x-m)**2,0)/arr.length;return{val:va.toFixed(8),det:`Mean = ${m.toFixed(4)}\nVariance σ² = ${va.toFixed(8)}`}},fmla:'σ² = Σ(x−μ)²/N'},
+  {id:'stddev',name:'Standard Deviation',icon:'σ',cat:'stats',desc:'Population std dev',fields:[{l:'Numbers (comma-separated)',k:'n',ph:'2, 4, 4, 4, 5, 5, 7, 9'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n));const m=arr.reduce((a,b)=>a+b,0)/arr.length;const va=arr.reduce((s,x)=>s+(x-m)**2,0)/arr.length;return{val:Math.sqrt(va).toFixed(8),det:`Mean = ${m.toFixed(4)}\nVariance = ${va.toFixed(6)}\nσ = ${Math.sqrt(va).toFixed(8)}`}},fmla:'σ = √(Σ(x−μ)²/N)'},
+  {id:'zscore',name:'Z-Score',icon:'Z',cat:'stats',desc:'Standard score',fields:[{l:'Value (x)',k:'x',ph:'75'},{l:'Mean (μ)',k:'m',ph:'70'},{l:'Std Dev (σ)',k:'s',ph:'5'}],fn(v){const z=(+v.x-+v.m)/+v.s;return{val:z.toFixed(6),det:`z = (${v.x}−${v.m}) / ${v.s} = ${z.toFixed(6)}`}},fmla:'z = (x−μ) / σ'},
+  {id:'prob',name:'Probability',icon:'P',cat:'stats',desc:'Basic probability',fields:[{l:'Favorable outcomes',k:'f',ph:'3'},{l:'Total outcomes',k:'t',ph:'6'}],fn(v){const p=+v.f/+v.t;return{val:`${p.toFixed(6)} (${(p*100).toFixed(2)}%)`,det:`P = ${v.f}/${v.t} = ${p.toFixed(6)}\nOdds: ${v.f}:${+v.t-+v.f}`}},fmla:'P = favorable / total'},
+  {id:'cprob',name:'Conditional Probability',icon:'P(A|B)',cat:'stats',desc:'P(A and B) / P(B)',fields:[{l:'P(A and B)',k:'ab',ph:'0.3'},{l:'P(B)',k:'b',ph:'0.5'}],fn(v){const r=+v.ab/+v.b;return{val:r.toFixed(8),det:`P(A|B) = P(A∩B)/P(B) = ${v.ab}/${v.b} = ${r.toFixed(8)}`}},fmla:'P(A|B) = P(A∩B) / P(B)'},
+  {id:'bayes',name:'Bayes Theorem',icon:'⊕',cat:'stats',desc:'Posterior probability',fields:[{l:'P(B|A)',k:'bga',ph:'0.9'},{l:'P(A)',k:'pa',ph:'0.01'},{l:'P(B)',k:'pb',ph:'0.108'}],fn(v){const r=(+v.bga*+v.pa)/+v.pb;return{val:r.toFixed(8),det:`P(A|B) = P(B|A)×P(A)/P(B)\n= ${v.bga}×${v.pa}/${v.pb} = ${r.toFixed(8)}`}},fmla:'P(A|B) = P(B|A)P(A)/P(B)'},
+  {id:'binom',name:'Binomial Distribution',icon:'B(n,p)',cat:'stats',desc:'P(X=k) for n trials',fields:[{l:'Trials (n)',k:'n',ph:'10'},{l:'Success prob (p)',k:'p',ph:'0.5'},{l:'Successes (k)',k:'k',ph:'3'}],fn(v){let n=+v.n,p=+v.p,k=+v.k;let c=1;for(let i=0;i<k;i++)c*=(n-i)/(i+1);const r=c*Math.pow(p,k)*Math.pow(1-p,n-k);return{val:r.toFixed(8),det:`P(X=${k}) = C(${n},${k})×${p}^${k}×${1-p}^${n-k} = ${r.toFixed(8)}`}},fmla:'P(X=k) = C(n,k)pᵏ(1−p)^(n−k)'},
+  {id:'poisson',name:'Poisson Distribution',icon:'Pλ',cat:'stats',desc:'P(X=k) for rate λ',fields:[{l:'Rate (λ)',k:'l',ph:'3'},{l:'Events (k)',k:'k',ph:'2'}],fn(v){let l=+v.l,k=+v.k,fact=1;for(let i=2;i<=k;i++)fact*=i;const r=Math.pow(l,k)*Math.exp(-l)/fact;return{val:r.toFixed(8),det:`P(X=${k}) = e^−${l} × ${l}^${k} / ${k}! = ${r.toFixed(8)}`}},fmla:'P(X=k) = λᵏe^(−λ)/k!'},
+  {id:'corr',name:'Correlation (r)',icon:'r',cat:'stats',desc:'Pearson correlation coefficient',fields:[{l:'X values (comma-sep)',k:'x',ph:'1,2,3,4,5'},{l:'Y values (comma-sep)',k:'y',ph:'2,4,5,4,5'}],fn(v){const xs=v.x.split(',').map(n=>+n.trim()),ys=v.y.split(',').map(n=>+n.trim());if(xs.length!==ys.length)return null;const n=xs.length,mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;const num=xs.reduce((s,x,i)=>s+(x-mx)*(ys[i]-my),0);const dx=Math.sqrt(xs.reduce((s,x)=>s+(x-mx)**2,0)),dy=Math.sqrt(ys.reduce((s,y)=>s+(y-my)**2,0));const r=num/(dx*dy);return{val:r.toFixed(6),det:`r = ${r.toFixed(6)}\nStrength: ${Math.abs(r)>0.8?'Strong':Math.abs(r)>0.5?'Moderate':'Weak'}`}},fmla:'r = Σ[(x−x̄)(y−ȳ)] / (σx·σy·n)'},
+  {id:'confint',name:'Confidence Interval',icon:'CI',cat:'stats',desc:'95% CI for a mean',fields:[{l:'Sample mean (x̄)',k:'m',ph:'50'},{l:'Std dev (σ)',k:'s',ph:'10'},{l:'Sample size (n)',k:'n',ph:'25'}],fn(v){const se=+v.s/Math.sqrt(+v.n),z=1.96,lo=+v.m-z*se,hi=+v.m+z*se;return{val:`[${lo.toFixed(4)}, ${hi.toFixed(4)}]`,det:`SE = ${se.toFixed(4)}\n95% CI = [${lo.toFixed(4)}, ${hi.toFixed(4)}]`}},fmla:'x̄ ± 1.96(σ/√n)'},
+  {id:'moe',name:'Margin of Error',icon:'±',cat:'stats',desc:'Margin of error for surveys',fields:[{l:'Z-score',k:'z',ph:'1.96'},{l:'Std dev (σ)',k:'s',ph:'0.5'},{l:'Sample size (n)',k:'n',ph:'100'}],fn(v){const r=+v.z*(+v.s/Math.sqrt(+v.n));return{val:`±${r.toFixed(6)}`,det:`MoE = z × (σ/√n) = ${v.z} × (${v.s}/√${v.n}) = ±${r.toFixed(6)}`}},fmla:'MoE = z × (σ/√n)'},
+  {id:'range',name:'Range',icon:'R',cat:'stats',desc:'Max − Min',fields:[{l:'Numbers (comma-sep)',k:'n',ph:'5,2,8,1,9,3'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n));return{val:Math.max(...arr)-Math.min(...arr),det:`Max = ${Math.max(...arr)}\nMin = ${Math.min(...arr)}\nRange = ${Math.max(...arr)-Math.min(...arr)}`}},fmla:'R = max − min'},
+  {id:'iqr',name:'IQR Calculator',icon:'IQR',cat:'stats',desc:'Interquartile range',fields:[{l:'Numbers (comma-sep)',k:'n',ph:'1,2,3,4,5,6,7,8,9'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n)).sort((a,b)=>a-b);const q1arr=arr.slice(0,Math.floor(arr.length/2)),q3arr=arr.slice(Math.ceil(arr.length/2));const q1=q1arr[Math.floor(q1arr.length/2)],q3=q3arr[Math.floor(q3arr.length/2)];return{val:q3-q1,det:`Q1 = ${q1}\nQ3 = ${q3}\nIQR = ${q3-q1}`}},fmla:'IQR = Q3 − Q1'},
+  {id:'pctile',name:'Percentile',icon:'Pₓ',cat:'stats',desc:'Value at a percentile',fields:[{l:'Numbers (comma-sep)',k:'n',ph:'10,20,30,40,50'},{l:'Percentile (0-100)',k:'p',ph:'75'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n)).sort((a,b)=>a-b);const idx=(+v.p/100)*(arr.length-1);const lo=Math.floor(idx),hi=Math.ceil(idx);const r=arr[lo]+(arr[hi]-arr[lo])*(idx-lo);return{val:r.toFixed(4),det:`${v.p}th percentile = ${r.toFixed(4)}`}},fmla:'Linear interpolation'},
+  {id:'sampsize',name:'Sample Size',icon:'n',cat:'stats',desc:'Required sample size',fields:[{l:'Z-score',k:'z',ph:'1.96'},{l:'Std dev (σ)',k:'s',ph:'10'},{l:'Margin of error',k:'e',ph:'2'}],fn(v){const r=Math.ceil((+v.z*+v.s/+v.e)**2);return{val:r,det:`n = (z·σ/E)² = (${v.z}×${v.s}/${v.e})² ≈ ${r}`}},fmla:'n = (z·σ/E)²'},
+  {id:'chisq',name:'Chi-Square',icon:'χ²',cat:'stats',desc:'Χ² statistic',fields:[{l:'Observed (comma-sep)',k:'o',ph:'10,15,20'},{l:'Expected (comma-sep)',k:'e',ph:'12,14,19'}],fn(v){const o=v.o.split(',').map(n=>+n.trim()),e=v.e.split(',').map(n=>+n.trim());if(o.length!==e.length)return null;const x2=o.reduce((s,ov,i)=>s+Math.pow(ov-e[i],2)/e[i],0);return{val:x2.toFixed(6),det:`χ² = Σ(O−E)²/E = ${x2.toFixed(6)}\ndf = ${o.length-1}`}},fmla:'χ² = Σ(O−E)²/E'},
+  {id:'skew',name:'Skewness',icon:'⤴',cat:'stats',desc:'Skewness of a dataset',fields:[{l:'Numbers (comma-sep)',k:'n',ph:'1,2,2,3,3,3,4,5,10'}],fn(v){const arr=v.n.split(',').map(n=>+n.trim()).filter(n=>!isNaN(n));const n=arr.length,m=arr.reduce((a,b)=>a+b)/n;const s3=arr.reduce((s,x)=>s+(x-m)**3,0)/n,s2=Math.sqrt(arr.reduce((s,x)=>s+(x-m)**2,0)/n);const sk=s3/(s2**3);return{val:sk.toFixed(6),det:`Skewness = ${sk.toFixed(6)}\n${sk>0?'Right-skewed':sk<0?'Left-skewed':'Symmetric'}`}},fmla:'γ₁ = E[(x−μ)³] / σ³'},
+  {id:'randnum',name:'Random Number',icon:'🎲',cat:'stats',desc:'Generate random number in range',fields:[{l:'Min',k:'min',ph:'1'},{l:'Max',k:'max',ph:'100'}],fn(v){const r=Math.floor(Math.random()*(+v.max-+v.min+1))+Math.floor(+v.min);return{val:r,det:`Random integer between ${v.min} and ${v.max}`}},fmla:'Math.random()'},
+
+  // GEOMETRY
+  {id:'areacirc',name:'Circle Area',icon:'⭕',cat:'geo',desc:'Area of a circle',fields:[{l:'Radius (r)',k:'r',ph:'7'}],fn(v){const a=Math.PI*Number(v.r)**2;return{val:a.toFixed(8),det:`A = πr² = π × ${v.r}² = ${a.toFixed(8)}`}},fmla:'A = πr²'},
+  {id:'circperim',name:'Circle Circumference',icon:'○',cat:'geo',desc:'Circumference of a circle',fields:[{l:'Radius (r)',k:'r',ph:'7'}],fn(v){const c=2*Math.PI*+v.r;return{val:c.toFixed(8),det:`C = 2πr = 2π×${v.r} = ${c.toFixed(8)}`}},fmla:'C = 2πr'},
+  {id:'arearect',name:'Rectangle Area',icon:'▬',cat:'geo',desc:'Area of a rectangle',fields:[{l:'Length (l)',k:'l',ph:'10'},{l:'Width (w)',k:'w',ph:'5'}],fn(v){return{val:+v.l*+v.w,det:`A = l×w = ${v.l}×${v.w} = ${+v.l*+v.w}`}},fmla:'A = l × w'},
+  {id:'rectperim',name:'Rectangle Perimeter',icon:'□',cat:'geo',desc:'Perimeter of a rectangle',fields:[{l:'Length (l)',k:'l',ph:'10'},{l:'Width (w)',k:'w',ph:'5'}],fn(v){return{val:2*(+v.l*+v.w?+v.l+v.w:0),det:`P = 2(l+w) = 2(${v.l}+${v.w}) = ${2*(+v.l+ +v.w)}`}},fmla:'P = 2(l+w)'},
+  {id:'areatri',name:'Triangle Area',icon:'△',cat:'geo',desc:'½ × base × height',fields:[{l:'Base (b)',k:'b',ph:'6'},{l:'Height (h)',k:'h',ph:'4'}],fn(v){const a=0.5*+v.b*+v.h;return{val:a,det:`A = ½bh = ½×${v.b}×${v.h} = ${a}`}},fmla:'A = ½bh'},
+  {id:'pyth',name:'Pythagorean Theorem',icon:'△²',cat:'geo',desc:'Find hypotenuse or leg',fields:[{l:'Side a',k:'a',ph:'3'},{l:'Side b',k:'b',ph:'4'},{l:'Find: c (hyp) or a/b (leg)',k:'find',ph:'c'}],fn(v){if(v.find.trim()==='c'){const c=Math.sqrt(Number(v.a)**2+ Number(v.b)**2);return{val:c.toFixed(8),det:`c = √(${v.a}²+${v.b}²) = ${c.toFixed(8)}`};}const x=Math.sqrt(Number(v.b)**2-Number(v.a)**2);return{val:x.toFixed(8),det:`x = √(${v.b}²−${v.a}²) = ${x.toFixed(8)}`}},fmla:'a² + b² = c²'},
+  {id:'volcyl',name:'Cylinder Volume',icon:'🥫',cat:'geo',desc:'Volume of a cylinder',fields:[{l:'Radius (r)',k:'r',ph:'5'},{l:'Height (h)',k:'h',ph:'10'}],fn(v){const vol=Math.PI*Number(v.r)**2*+v.h;return{val:vol.toFixed(8),det:`V = πr²h = π×${v.r}²×${v.h} = ${vol.toFixed(8)}`}},fmla:'V = πr²h'},
+  {id:'volsph',name:'Sphere Volume',icon:'🌐',cat:'geo',desc:'Volume of a sphere',fields:[{l:'Radius (r)',k:'r',ph:'5'}],fn(v){const vol=(4/3)*Math.PI*Number(v.r)**3;return{val:vol.toFixed(8),det:`V = (4/3)πr³ = ${vol.toFixed(8)}`}},fmla:'V = (4/3)πr³'},
+  {id:'volcone',name:'Cone Volume',icon:'🔺',cat:'geo',desc:'Volume of a cone',fields:[{l:'Radius (r)',k:'r',ph:'3'},{l:'Height (h)',k:'h',ph:'7'}],fn(v){const vol=(1/3)*Math.PI*Number(v.r)**2*+v.h;return{val:vol.toFixed(8),det:`V = (1/3)πr²h = ${vol.toFixed(8)}`}},fmla:'V = πr²h/3'},
+  {id:'volcube',name:'Cube Volume',icon:'⬜',cat:'geo',desc:'Volume of a cube',fields:[{l:'Side (a)',k:'a',ph:'4'}],fn(v){const vol=Number(v.a)**3;return{val:vol,det:`V = a³ = ${v.a}³ = ${vol}`}},fmla:'V = a³'},
+  {id:'volcuboid',name:'Cuboid Volume',icon:'📦',cat:'geo',desc:'Volume of a cuboid',fields:[{l:'Length (l)',k:'l',ph:'5'},{l:'Width (w)',k:'w',ph:'3'},{l:'Height (h)',k:'h',ph:'4'}],fn(v){const vol=+v.l*+v.w*+v.h;return{val:vol,det:`V = l×w×h = ${v.l}×${v.w}×${v.h} = ${vol}`}},fmla:'V = l×w×h'},
+  {id:'sarect',name:'Rectangle Surface Area',icon:'▦',cat:'geo',desc:'Perimeter of a rectangle',fields:[{l:'Length',k:'l',ph:'5'},{l:'Width',k:'w',ph:'3'}],fn(v){const p=2*(Number(v.l)+Number(v.w));return{val:p,det:`P = 2(l+w) = 2(${v.l}+${v.w}) = ${p}`}},fmla:'P = 2(l+w)'},
+  {id:'sacyl',name:'Cylinder Surface Area',icon:'🥫',cat:'geo',desc:'Total SA of a cylinder',fields:[{l:'Radius (r)',k:'r',ph:'4'},{l:'Height (h)',k:'h',ph:'10'}],fn(v){const sa=2*Math.PI*+v.r*(+v.r+ +v.h);return{val:sa.toFixed(8),det:`SA = 2πr(r+h) = ${sa.toFixed(8)}`}},fmla:'SA = 2πr(r+h)'},
+  {id:'sasph',name:'Sphere Surface Area',icon:'🌐',cat:'geo',desc:'SA of a sphere',fields:[{l:'Radius (r)',k:'r',ph:'5'}],fn(v){const sa=4*Math.PI*Number(v.r)**2;return{val:sa.toFixed(8),det:`SA = 4πr² = ${sa.toFixed(8)}`}},fmla:'SA = 4πr²'},
+  {id:'ellipse',name:'Ellipse Area',icon:'⬭',cat:'geo',desc:'Area of an ellipse',fields:[{l:'Semi-major axis (a)',k:'a',ph:'6'},{l:'Semi-minor axis (b)',k:'b',ph:'4'}],fn(v){const a=Math.PI*+v.a*+v.b;return{val:a.toFixed(8),det:`A = πab = π×${v.a}×${v.b} = ${a.toFixed(8)}`}},fmla:'A = πab'},
+  {id:'areatrap',name:'Trapezium Area',icon:'⏢',cat:'geo',desc:'Area of a trapezium',fields:[{l:'Base a',k:'a',ph:'6'},{l:'Base b',k:'b',ph:'10'},{l:'Height (h)',k:'h',ph:'4'}],fn(v){const ar=0.5*(+v.a+ +v.b)*+v.h;return{val:ar,det:`A = ½(a+b)h = ½(${v.a}+${v.b})×${v.h} = ${ar}`}},fmla:'A = ½(a+b)h'},
+  {id:'arclen',name:'Arc Length',icon:'⌒',cat:'geo',desc:'Length of an arc',fields:[{l:'Radius (r)',k:'r',ph:'10'},{l:'Central angle (°)',k:'deg',ph:'90'}],fn(v){const a=Math.PI*+v.r*+v.deg/180;return{val:a.toFixed(8),det:`L = rθ = ${v.r}×${(+v.deg*Math.PI/180).toFixed(6)} = ${a.toFixed(8)}`}},fmla:'L = rθ (θ in radians)'},
+  {id:'sector',name:'Sector Area',icon:'🥧',cat:'geo',desc:'Area of a sector',fields:[{l:'Radius (r)',k:'r',ph:'10'},{l:'Central angle (°)',k:'deg',ph:'90'}],fn(v){const a=0.5*Number(v.r)**2*+v.deg*Math.PI/180;return{val:a.toFixed(8),det:`A = ½r²θ = ${a.toFixed(8)}`}},fmla:'A = ½r²θ'},
+  {id:'chord',name:'Chord Length',icon:'⌓',cat:'geo',desc:'Length of a chord',fields:[{l:'Radius (r)',k:'r',ph:'10'},{l:'Central angle (°)',k:'deg',ph:'60'}],fn(v){const c=2*+v.r*Math.sin(+v.deg*Math.PI/360);return{val:c.toFixed(8),det:`Chord = 2r×sin(θ/2) = ${c.toFixed(8)}`}},fmla:'Chord = 2r·sin(θ/2)'},
+  {id:'interangle',name:'Interior Angles',icon:'∠',cat:'geo',desc:'Sum of interior angles of polygon',fields:[{l:'Number of sides (n)',k:'n',ph:'6'}],fn(v){const s=(+v.n-2)*180;return{val:`${s}°`,det:`Sum = (n−2)×180° = (${v.n}−2)×180 = ${s}°\nEach = ${(s/+v.n).toFixed(4)}°`}},fmla:'S = (n−2) × 180°'},
+  {id:'exterangle',name:'Exterior Angles',icon:'∠°',cat:'geo',desc:'Exterior angle of regular polygon',fields:[{l:'Number of sides (n)',k:'n',ph:'6'}],fn(v){return{val:`${(360/+v.n).toFixed(4)}°`,det:`Exterior angle = 360/n = ${(360/+v.n).toFixed(4)}°`}},fmla:'E = 360° / n'},
+  {id:'rhombus',name:'Rhombus Area',icon:'◆',cat:'geo',desc:'Area using diagonals',fields:[{l:'Diagonal d₁',k:'d1',ph:'6'},{l:'Diagonal d₂',k:'d2',ph:'8'}],fn(v){const a=0.5*+v.d1*+v.d2;return{val:a,det:`A = ½d₁d₂ = ½×${v.d1}×${v.d2} = ${a}`}},fmla:'A = ½d₁d₂'},
+  {id:'scalefac',name:'Scale Factor',icon:'⤢',cat:'geo',desc:'Scale factor between shapes',fields:[{l:'Original dimension',k:'o',ph:'5'},{l:'Scaled dimension',k:'s',ph:'15'}],fn(v){const f=+v.s/+v.o;return{val:f.toFixed(6),det:`Scale factor = ${v.s}/${v.o} = ${f.toFixed(6)}\nArea scale = ${(f**2).toFixed(4)}`}},fmla:'k = new / original'},
+
+  // PHYSICS
+  {id:'speed',name:'Speed Calculator',icon:'💨',cat:'physics',desc:'v = d/t',fields:[{l:'Distance (d)',k:'d',ph:'100'},{l:'Time (t)',k:'t',ph:'10'},{l:'Unit',k:'u',ph:'m/s'}],fn(v){return{val:`${(+v.d/+v.t).toFixed(6)} ${v.u}`,det:`v = d/t = ${v.d}/${v.t} = ${(+v.d/+v.t).toFixed(6)} ${v.u}`}},fmla:'v = d/t'},
+  {id:'accel',name:'Acceleration',icon:'🚀',cat:'physics',desc:'a = (v-u)/t',fields:[{l:'Initial velocity (u)',k:'u',ph:'0'},{l:'Final velocity (v)',k:'v',ph:'20'},{l:'Time (t)',k:'t',ph:'4'}],fn(v){const a=(+v.v-+v.u)/+v.t;return{val:`${a.toFixed(6)} m/s²`,det:`a = (v−u)/t = (${v.v}−${v.u})/${v.t} = ${a.toFixed(6)} m/s²`}},fmla:'a = (v−u) / t'},
+  {id:'force',name:'Force (F=ma)',icon:'⚡',cat:'physics',desc:"Newton's second law",fields:[{l:'Mass (m) kg',k:'m',ph:'10'},{l:'Acceleration (a) m/s²',k:'a',ph:'9.8'}],fn(v){const f=+v.m*+v.a;return{val:`${f.toFixed(6)} N`,det:`F = m×a = ${v.m}×${v.a} = ${f.toFixed(6)} N`}},fmla:'F = ma'},
+  {id:'momentum',name:'Momentum',icon:'➡',cat:'physics',desc:'p = mv',fields:[{l:'Mass (m) kg',k:'m',ph:'5'},{l:'Velocity (v) m/s',k:'v',ph:'10'}],fn(v){return{val:`${(+v.m*+v.v).toFixed(6)} kg·m/s`,det:`p = mv = ${v.m}×${v.v} = ${(+v.m*+v.v).toFixed(6)} kg·m/s`}},fmla:'p = mv'},
+  {id:'ke',name:'Kinetic Energy',icon:'⚙',cat:'physics',desc:'KE = ½mv²',fields:[{l:'Mass (m) kg',k:'m',ph:'10'},{l:'Velocity (v) m/s',k:'v',ph:'5'}],fn(v){const ke=0.5*+v.m*Number(v.v)**2;return{val:`${ke.toFixed(6)} J`,det:`KE = ½mv² = ½×${v.m}×${v.v}² = ${ke.toFixed(6)} J`}},fmla:'KE = ½mv²'},
+  {id:'pe',name:'Potential Energy',icon:'⬆',cat:'physics',desc:'PE = mgh',fields:[{l:'Mass (m) kg',k:'m',ph:'10'},{l:'Height (h) m',k:'h',ph:'5'},{l:'g (m/s²)',k:'g',ph:'9.81'}],fn(v){const pe=+v.m*+v.g*+v.h;return{val:`${pe.toFixed(6)} J`,det:`PE = mgh = ${v.m}×${v.g}×${v.h} = ${pe.toFixed(6)} J`}},fmla:'PE = mgh'},
+  {id:'work',name:'Work Calculator',icon:'🔧',cat:'physics',desc:'W = F·d·cos(θ)',fields:[{l:'Force (N)',k:'f',ph:'10'},{l:'Distance (m)',k:'d',ph:'5'},{l:'Angle θ (°)',k:'a',ph:'0'}],fn(v){const w=+v.f*+v.d*Math.cos(+v.a*Math.PI/180);return{val:`${w.toFixed(6)} J`,det:`W = Fd·cos(θ) = ${v.f}×${v.d}×cos(${v.a}°) = ${w.toFixed(6)} J`}},fmla:'W = Fd·cosθ'},
+  {id:'power',name:'Power (Physics)',icon:'⚡',cat:'physics',desc:'P = W/t',fields:[{l:'Work (W) J',k:'w',ph:'100'},{l:'Time (t) s',k:'t',ph:'5'}],fn(v){return{val:`${(+v.w/+v.t).toFixed(6)} W`,det:`P = W/t = ${v.w}/${v.t} = ${(+v.w/+v.t).toFixed(6)} W`}},fmla:'P = W/t'},
+  {id:'pressure',name:'Pressure',icon:'🔽',cat:'physics',desc:'P = F/A',fields:[{l:'Force (N)',k:'f',ph:'100'},{l:'Area (m²)',k:'a',ph:'2'}],fn(v){return{val:`${(+v.f/+v.a).toFixed(6)} Pa`,det:`P = F/A = ${v.f}/${v.a} = ${(+v.f/+v.a).toFixed(6)} Pa`}},fmla:'P = F/A'},
+  {id:'density',name:'Density',icon:'⚫',cat:'physics',desc:'ρ = m/V',fields:[{l:'Mass (kg)',k:'m',ph:'10'},{l:'Volume (m³)',k:'v',ph:'2'}],fn(v){return{val:`${(+v.m/+v.v).toFixed(6)} kg/m³`,det:`ρ = m/V = ${v.m}/${v.v} = ${(+v.m/+v.v).toFixed(6)} kg/m³`}},fmla:'ρ = m/V'},
+  {id:'gravity',name:'Gravitational Force',icon:'🌍',cat:'physics',desc:'F = Gm₁m₂/r²',fields:[{l:'Mass m₁ (kg)',k:'m1',ph:'5.97e24'},{l:'Mass m₂ (kg)',k:'m2',ph:'70'},{l:'Distance r (m)',k:'r',ph:'6.37e6'}],fn(v){const G=6.674e-11,f=G*+v.m1*+v.m2/Number(v.r)**2;return{val:`${f.toFixed(4)} N`,det:`F = Gm₁m₂/r² = ${f.toFixed(4)} N`}},fmla:'F = Gm₁m₂/r²'},
+  {id:'projectile',name:'Projectile Motion',icon:'🏹',cat:'physics',desc:'Range & max height',fields:[{l:'Initial velocity (m/s)',k:'v',ph:'20'},{l:'Angle (°)',k:'a',ph:'45'},{l:'g (m/s²)',k:'g',ph:'9.81'}],fn(v){const a=+v.a*Math.PI/180,v0=+v.v,g=+v.g;const R=v0**2*Math.sin(2*a)/g,H=v0**2*Math.sin(a)**2/(2*g),T=2*v0*Math.sin(a)/g;return{val:`Range = ${R.toFixed(4)} m`,det:`Range = ${R.toFixed(4)} m\nMax Height = ${H.toFixed(4)} m\nTime = ${T.toFixed(4)} s`}},fmla:'R = v₀²sin2θ/g'},
+  {id:'ohm',name:"Ohm's Law",icon:'Ω',cat:'physics',desc:'V = IR relationship',fields:[{l:'Voltage V (V)',k:'v',ph:''},{l:'Current I (A)',k:'i',ph:''},{l:'Resistance R (Ω)',k:'r',ph:''}],fn(v){const V=+v.v,I=+v.i,R=+v.r;if(V&&I&&!R)return{val:`R = ${(V/I).toFixed(6)} Ω`,det:`R = V/I = ${V}/${I}`};if(V&&R&&!I)return{val:`I = ${(V/R).toFixed(6)} A`,det:`I = V/R = ${V}/${R}`};if(I&&R&&!V)return{val:`V = ${(I*R).toFixed(6)} V`,det:`V = IR = ${I}×${R}`};return{val:`V=${V}, I=${I}, R=${R}`,det:'Leave one field empty to solve for it.'}},fmla:'V = I×R'},
+  {id:'elecpow',name:'Electric Power',icon:'💡',cat:'physics',desc:'P = VI = I²R = V²/R',fields:[{l:'Voltage (V)',k:'v',ph:'120'},{l:'Current (A)',k:'i',ph:'2'}],fn(v){const p=+v.v*+v.i;return{val:`${p.toFixed(4)} W`,det:`P = V×I = ${v.v}×${v.i} = ${p.toFixed(4)} W`}},fmla:'P = VI'},
+  {id:'freq',name:'Wave Frequency',icon:'〜',cat:'physics',desc:'f = 1/T',fields:[{l:'Period (T) in seconds',k:'t',ph:'0.01'}],fn(v){return{val:`${(1/+v.t).toFixed(6)} Hz`,det:`f = 1/T = 1/${v.t} = ${(1/+v.t).toFixed(6)} Hz`}},fmla:'f = 1/T'},
+  {id:'wavelen',name:'Wavelength',icon:'↔',cat:'physics',desc:'λ = v/f',fields:[{l:'Wave speed (m/s)',k:'v',ph:'340'},{l:'Frequency (Hz)',k:'f',ph:'1000'}],fn(v){const l=+v.v/+v.f;return{val:`${l.toFixed(8)} m`,det:`λ = v/f = ${v.v}/${v.f} = ${l.toFixed(8)} m`}},fmla:'λ = v/f'},
+  {id:'torque',name:'Torque',icon:'🔁',cat:'physics',desc:'τ = r × F × sin(θ)',fields:[{l:'Force (N)',k:'f',ph:'100'},{l:'Radius/arm (m)',k:'r',ph:'0.5'},{l:'Angle θ (°)',k:'a',ph:'90'}],fn(v){const t=+v.r*+v.f*Math.sin(+v.a*Math.PI/180);return{val:`${t.toFixed(6)} N·m`,det:`τ = r×F×sin(θ) = ${v.r}×${v.f}×sin(${v.a}°) = ${t.toFixed(6)} N·m`}},fmla:'τ = rFsinθ'},
+  {id:'halflife',name:'Half-Life Decay',icon:'☢',cat:'physics',desc:'Radioactive decay',fields:[{l:'Initial amount (N₀)',k:'n0',ph:'100'},{l:'Half-life (t½)',k:'hl',ph:'5'},{l:'Time elapsed (t)',k:'t',ph:'15'}],fn(v){const r=+v.n0*Math.pow(0.5,+v.t/+v.hl);return{val:r.toFixed(6),det:`N = N₀×(½)^(t/t½)\n= ${v.n0}×(½)^(${v.t}/${v.hl}) = ${r.toFixed(6)}`}},fmla:'N = N₀(½)^(t/t½)'},
+  {id:'impulse',name:'Impulse',icon:'💢',cat:'physics',desc:'J = F × Δt',fields:[{l:'Force (N)',k:'f',ph:'50'},{l:'Time (s)',k:'t',ph:'0.1'}],fn(v){return{val:`${(+v.f*+v.t).toFixed(6)} N·s`,det:`J = F×Δt = ${v.f}×${v.t} = ${(+v.f*+v.t).toFixed(6)} N·s`}},fmla:'J = F·Δt'},
+  {id:'therm',name:'Thermal Expansion',icon:'🌡',cat:'physics',desc:'ΔL = αL₀ΔT',fields:[{l:'Original length (m)',k:'l',ph:'1'},{l:'Temp change (°C)',k:'dt',ph:'50'},{l:'Coeff α (1/°C)',k:'a',ph:'12e-6'}],fn(v){const dl=+v.a*+v.l*+v.dt;return{val:`${dl.toFixed(10)} m`,det:`ΔL = α×L₀×ΔT = ${v.a}×${v.l}×${v.dt} = ${dl.toFixed(10)} m`}},fmla:'ΔL = αL₀ΔT'},
+  {id:'circmo',name:'Circular Motion',icon:'🔄',cat:'physics',desc:'Centripetal acceleration',fields:[{l:'Velocity (m/s)',k:'v',ph:'10'},{l:'Radius (m)',k:'r',ph:'5'}],fn(v){const a=Number(v.v)**2/+v.r;return{val:`${a.toFixed(6)} m/s²`,det:`a = v²/r = ${v.v}²/${v.r} = ${a.toFixed(6)} m/s²`}},fmla:'a = v²/r'},
+
+  // CHEMISTRY
+  {id:'ph',name:'pH Calculator',icon:'⚗',cat:'chem',desc:'pH from H⁺ concentration',fields:[{l:'[H⁺] concentration (mol/L)',k:'h',ph:'1e-7'}],fn(v){const ph=-Math.log10(+v.h);return{val:ph.toFixed(6),det:`pH = −log₁₀[H⁺] = −log₁₀(${v.h}) = ${ph.toFixed(6)}\n${ph<7?'Acidic':ph>7?'Basic':'Neutral'}`}},fmla:'pH = −log₁₀[H⁺]'},
+  {id:'poh',name:'pOH Calculator',icon:'⚗',cat:'chem',desc:'pOH from OH⁻ concentration',fields:[{l:'[OH⁻] concentration (mol/L)',k:'oh',ph:'1e-7'}],fn(v){const poh=-Math.log10(+v.oh);return{val:poh.toFixed(6),det:`pOH = −log₁₀[OH⁻] = ${poh.toFixed(6)}\npH = ${(14-poh).toFixed(6)}`}},fmla:'pOH = −log₁₀[OH⁻]'},
+  {id:'molar',name:'Molarity (M)',icon:'🧪',cat:'chem',desc:'Moles / volume in liters',fields:[{l:'Moles of solute (n)',k:'n',ph:'0.5'},{l:'Volume of solution (L)',k:'v',ph:'0.25'}],fn(v){return{val:`${(+v.n/+v.v).toFixed(6)} M`,det:`M = n/V = ${v.n}/${v.v} = ${(+v.n/+v.v).toFixed(6)} mol/L`}},fmla:'M = n/V'},
+  {id:'mole',name:'Mole Calculator',icon:'🔬',cat:'chem',desc:'n = mass / molar mass',fields:[{l:'Mass (g)',k:'m',ph:'18'},{l:'Molar mass (g/mol)',k:'mm',ph:'18'}],fn(v){return{val:`${(+v.m/+v.mm).toFixed(6)} mol`,det:`n = m/M = ${v.m}/${v.mm} = ${(+v.m/+v.mm).toFixed(6)} mol`}},fmla:'n = m/M'},
+  {id:'dilution',name:'Dilution Calculator',icon:'💧',cat:'chem',desc:'C₁V₁ = C₂V₂',fields:[{l:'C₁ (initial conc)',k:'c1',ph:'2'},{l:'V₁ (initial vol, L)',k:'v1',ph:'0.1'},{l:'C₂ (final conc)',k:'c2',ph:'0.5'}],fn(v){const v2=+v.c1*+v.v1/+v.c2;return{val:`V₂ = ${v2.toFixed(6)} L`,det:`C₁V₁ = C₂V₂\n${v.c1}×${v.v1} = ${v.c2}×V₂\nV₂ = ${v2.toFixed(6)} L`}},fmla:'C₁V₁ = C₂V₂'},
+  {id:'idealgas',name:'Ideal Gas Law',icon:'💨',cat:'chem',desc:'PV = nRT',fields:[{l:'Pressure P (atm)',k:'p',ph:'1'},{l:'Volume V (L)',k:'v',ph:'22.4'},{l:'Moles n',k:'n',ph:''}],fn(v){const R=0.08206,T=273.15;if(!v.n){const n=+v.p*+v.v/(R*T);return{val:`n = ${n.toFixed(6)} mol`,det:`n = PV/RT = ${v.p}×${v.v}/(${R}×${T}) = ${n.toFixed(6)} mol`};}const T2=+v.p*+v.v/(+v.n*R);return{val:`T = ${T2.toFixed(4)} K`,det:`T = PV/nR = ${T2.toFixed(4)} K = ${(T2-273.15).toFixed(4)} °C`}},fmla:'PV = nRT (R=0.08206 L·atm/mol·K)'},
+  {id:'boyle',name:"Boyle's Law",icon:'🫁',cat:'chem',desc:'P₁V₁ = P₂V₂',fields:[{l:'P₁',k:'p1',ph:'1'},{l:'V₁',k:'v1',ph:'10'},{l:'P₂',k:'p2',ph:'2'}],fn(v){const v2=+v.p1*+v.v1/+v.p2;return{val:`V₂ = ${v2.toFixed(6)}`,det:`P₁V₁ = P₂V₂\n${v.p1}×${v.v1} = ${v.p2}×V₂ → V₂ = ${v2.toFixed(6)}`}},fmla:'P₁V₁ = P₂V₂'},
+  {id:'charles',name:"Charles' Law",icon:'🔥',cat:'chem',desc:'V₁/T₁ = V₂/T₂',fields:[{l:'V₁',k:'v1',ph:'5'},{l:'T₁ (K)',k:'t1',ph:'300'},{l:'T₂ (K)',k:'t2',ph:'600'}],fn(v){const v2=+v.v1*+v.t2/+v.t1;return{val:`V₂ = ${v2.toFixed(6)}`,det:`V₁/T₁ = V₂/T₂\nV₂ = V₁T₂/T₁ = ${v2.toFixed(6)}`}},fmla:'V₁/T₁ = V₂/T₂'},
+  {id:'pctyield',name:'Percent Yield',icon:'🎯',cat:'chem',desc:'Actual/Theoretical × 100',fields:[{l:'Actual yield (g)',k:'a',ph:'8'},{l:'Theoretical yield (g)',k:'t',ph:'10'}],fn(v){return{val:`${(+v.a/+v.t*100).toFixed(4)}%`,det:`%Yield = (${v.a}/${v.t})×100 = ${(+v.a/+v.t*100).toFixed(4)}%`}},fmla:'%Yield = (actual/theoretical)×100'},
+  {id:'pctcomp',name:'Percent Composition',icon:'🧬',cat:'chem',desc:'Mass fraction of element',fields:[{l:'Element mass (g/mol)',k:'e',ph:'28'},{l:'Molar mass of compound',k:'m',ph:'44'}],fn(v){return{val:`${(+v.e/+v.m*100).toFixed(4)}%`,det:`%Comp = (${v.e}/${v.m})×100 = ${(+v.e/+v.m*100).toFixed(4)}%`}},fmla:'%Comp = (element mass / molar mass)×100'},
+  {id:'nucdecay',name:'Nuclear Decay',icon:'☢',cat:'chem',desc:'Activity A = λN',fields:[{l:'Decay constant λ (s⁻¹)',k:'l',ph:'0.00693'},{l:'Number of atoms N',k:'n',ph:'1e20'}],fn(v){const A=+v.l*+v.n;return{val:`${A.toExponential(4)} decays/s`,det:`A = λN = ${v.l}×${v.n} = ${A.toExponential(4)} Bq`}},fmla:'A = λN'},
+  {id:'keq',name:'Equilibrium Constant',icon:'⇌',cat:'chem',desc:'Kc from concentrations',fields:[{l:'[Products] (comma-sep)',k:'p',ph:'2,3'},{l:'[Reactants] (comma-sep)',k:'r',ph:'1,4'},{l:'Stoich powers match order',k:'note',ph:'Enter concentrations'}],fn(v){const p=v.p.split(',').map(n=>+n.trim()).reduce((a,b)=>a*b,1);const r=v.r.split(',').map(n=>+n.trim()).reduce((a,b)=>a*b,1);return{val:(p/r).toFixed(8),det:`Kc = [Products]/[Reactants]\n= ${p}/${r} = ${(p/r).toFixed(8)}`}},fmla:'Kc = [P]^p / [R]^r'},
+  {id:'rxnrate',name:'Reaction Rate',icon:'⏱',cat:'chem',desc:'Rate = k[A]^m[B]^n',fields:[{l:'Rate constant k',k:'k',ph:'0.5'},{l:'[A]',k:'a',ph:'2'},{l:'Order for A (m)',k:'m',ph:'1'},{l:'[B]',k:'b',ph:'1'},{l:'Order for B (n)',k:'n',ph:'2'}],fn(v){const rate=+v.k*Math.pow(+v.a,+v.m)*Math.pow(+v.b,+v.n);return{val:rate.toFixed(8),det:`Rate = ${v.k}×${v.a}^${v.m}×${v.b}^${v.n} = ${rate.toFixed(8)}`}},fmla:'rate = k[A]^m[B]^n'},
+  {id:'molality',name:'Molality',icon:'⚖',cat:'chem',desc:'mol solute / kg solvent',fields:[{l:'Moles of solute',k:'n',ph:'0.5'},{l:'Mass of solvent (kg)',k:'m',ph:'0.25'}],fn(v){return{val:`${(+v.n/+v.m).toFixed(6)} m`,det:`m = n/kg = ${v.n}/${v.m} = ${(+v.n/+v.m).toFixed(6)} mol/kg`}},fmla:'m = n/kg(solvent)'},
+
+  // COMPUTER SCIENCE
+  {id:'binary',name:'Binary Converter',icon:'01',cat:'comp',desc:'Decimal ↔ Binary',fields:[{l:'Decimal number',k:'d',ph:'42'}],fn(v){const n=Math.floor(+v.d);return{val:n.toString(2),det:`${n} in binary = ${n.toString(2)}\nOctal = ${n.toString(8)}\nHex = ${n.toString(16).toUpperCase()}`}},fmla:'Base 2 representation'},
+  {id:'hex',name:'Hexadecimal',icon:'0x',cat:'comp',desc:'Decimal ↔ Hex',fields:[{l:'Decimal number',k:'d',ph:'255'}],fn(v){const n=Math.floor(+v.d);return{val:`0x${n.toString(16).toUpperCase()}`,det:`${n} in hex = 0x${n.toString(16).toUpperCase()}\nBinary = ${n.toString(2)}`}},fmla:'Base 16'},
+  {id:'octal',name:'Octal Converter',icon:'0o',cat:'comp',desc:'Decimal ↔ Octal',fields:[{l:'Decimal number',k:'d',ph:'64'}],fn(v){const n=Math.floor(+v.d);return{val:`0o${n.toString(8)}`,det:`${n} in octal = 0o${n.toString(8)}`}},fmla:'Base 8'},
+  {id:'baseconv',name:'Base Converter',icon:'⇄',cat:'comp',desc:'Convert between any bases',fields:[{l:'Number',k:'n',ph:'1010'},{l:'From base',k:'from',ph:'2'},{l:'To base',k:'to',ph:'10'}],fn(v){const n=parseInt(v.n,+v.from);return{val:n.toString(+v.to).toUpperCase(),det:`${v.n} (base ${v.from}) = ${n.toString(+v.to).toUpperCase()} (base ${v.to})`}},fmla:'parseInt + toString'},
+  {id:'ascii',name:'ASCII Converter',icon:'A',cat:'comp',desc:'Character ↔ ASCII code',fields:[{l:'Character or code',k:'c',ph:'A'}],fn(v){if(+v.c===+v.c&&!isNaN(+v.c)){return{val:String.fromCharCode(+v.c),det:`ASCII ${v.c} = '${String.fromCharCode(+v.c)}'`};}return{val:v.c.charCodeAt(0),det:`'${v.c[0]}' = ASCII ${v.c.charCodeAt(0)}`}},fmla:'ASCII table'},
+  {id:'bitwiseand',name:'Bitwise AND',icon:'&',cat:'comp',desc:'a AND b',fields:[{l:'A (decimal)',k:'a',ph:'12'},{l:'B (decimal)',k:'b',ph:'10'}],fn(v){const r=+v.a&+v.b;return{val:r,det:`${v.a} (${(+v.a).toString(2)}) AND ${v.b} (${(+v.b).toString(2)}) = ${r} (${r.toString(2)})`}},fmla:'a & b'},
+  {id:'bitwiseor',name:'Bitwise OR',icon:'|',cat:'comp',desc:'a OR b',fields:[{l:'A (decimal)',k:'a',ph:'12'},{l:'B (decimal)',k:'b',ph:'10'}],fn(v){const r=+v.a|+v.b;return{val:r,det:`${v.a} OR ${v.b} = ${r} (${r.toString(2)})`}},fmla:'a | b'},
+  {id:'bitwisexor',name:'Bitwise XOR',icon:'^',cat:'comp',desc:'a XOR b',fields:[{l:'A (decimal)',k:'a',ph:'12'},{l:'B (decimal)',k:'b',ph:'10'}],fn(v){const r=+v.a^+v.b;return{val:r,det:`${v.a} XOR ${v.b} = ${r} (${r.toString(2)})`}},fmla:'a ^ b'},
+  {id:'datasize',name:'Data Size Converter',icon:'💾',cat:'comp',desc:'Bytes conversion',fields:[{l:'Value',k:'v',ph:'1024'},{l:'From unit',k:'from',ph:'KB'}],fn(v){const units={B:1,KB:1024,MB:1024**2,GB:1024**3,TB:1024**4};const b=+v.v*(units[v.from]||1);return{val:`${b.toFixed(0)} B`,det:`${v.v} ${v.from} = ${b} B = ${(b/1024).toFixed(4)} KB = ${(b/1024**2).toFixed(6)} MB`}},fmla:'1 KB = 1024 B'},
+  {id:'bandwidth',name:'Bandwidth Calculator',icon:'📡',cat:'comp',desc:'Download time',fields:[{l:'File size (MB)',k:'s',ph:'500'},{l:'Speed (Mbps)',k:'sp',ph:'100'}],fn(v){const t=(+v.s*8)/+v.sp;return{val:`${t.toFixed(4)} seconds`,det:`Time = (${v.s}MB × 8) / ${v.sp}Mbps = ${t.toFixed(4)} s ≈ ${(t/60).toFixed(2)} min`}},fmla:'Time = (size×8) / speed'},
+  {id:'ip',name:'IP Subnet',icon:'🌐',cat:'comp',desc:'Hosts per subnet',fields:[{l:'Subnet bits (n)',k:'n',ph:'24'}],fn(v){const hosts=Math.pow(2,32-+v.n)-2;const subnets=Math.pow(2,+v.n-16)||1;return{val:`${hosts} hosts`,det:`/${v.n} subnet\nUsable hosts = 2^(32−${v.n})−2 = ${hosts}\nNetwork: 255.255.${+v.n>23?255:0}.0`}},fmla:'hosts = 2^(32−n) − 2'},
+  {id:'timecomp',name:'Time Complexity',icon:'O()',cat:'comp',desc:'Compare algorithm complexities',fields:[{l:'Input size n',k:'n',ph:'100'},{l:'Complexity (1,log,n,n2,2n)',k:'c',ph:'n'}],fn(v){const n=+v.n;const map={1:1,log:Math.log2(n),n,n2:n**2,'2n':Math.pow(2,n),'nlog':n*Math.log2(n)};const k=v.c.trim().replace('^2','2');const r=map[k];return r!==undefined?{val:r.toFixed(2),det:`O(${k}) at n=${n}: ~${r.toFixed(2)} operations`}:{val:'?',det:'Use: 1, log, n, nlog, n2, 2n'}},fmla:'Big-O notation'},
+  {id:'crc',name:'CRC-16',icon:'🔐',cat:'comp',desc:'Checksum for error detection',fields:[{l:'Text input',k:'t',ph:'Hello World'}],fn(v){let crc=0xFFFF;for(let i=0;i<v.t.length;i++){crc^=v.t.charCodeAt(i);for(let j=0;j<8;j++)crc=crc&1?((crc>>1)^0xA001):crc>>1;}return{val:`0x${crc.toString(16).toUpperCase().padStart(4,'0')}`,det:`CRC-16 of "${v.t}" = 0x${crc.toString(16).toUpperCase()}`}},fmla:'CRC-16/IBM polynomial'},
+  {id:'mem',name:'Memory Usage',icon:'🧠',cat:'comp',desc:'Array memory estimate',fields:[{l:'Elements (n)',k:'n',ph:'1000'},{l:'Bytes per element',k:'b',ph:'8'}],fn(v){const b=+v.n*+v.b;return{val:`${b} bytes`,det:`${v.n} elements × ${v.b} bytes = ${b} B = ${(b/1024).toFixed(4)} KB`}},fmla:'Memory = n × bytes_per_element'},
+
+  // FINANCE & LIFE
+  {id:'simint',name:'Simple Interest',icon:'💵',cat:'finance',desc:'SI = PRT',fields:[{l:'Principal (P)',k:'p',ph:'10000'},{l:'Rate % per year (R)',k:'r',ph:'8'},{l:'Time in years (T)',k:'t',ph:'3'}],fn(v){const si=+v.p*+v.r/100*+v.t,amt=+v.p+si;return{val:`SI = ${si.toFixed(2)}`,det:`SI = PRT = ${v.p}×${v.r}%×${v.t} = ${si.toFixed(2)}\nTotal Amount = ${amt.toFixed(2)}`}},fmla:'SI = P×R×T/100'},
+  {id:'compint',name:'Compound Interest',icon:'📈',cat:'finance',desc:'A = P(1 + r/n)^nt',fields:[{l:'Principal (P)',k:'p',ph:'10000'},{l:'Rate % (r)',k:'r',ph:'8'},{l:'Compounds/year (n)',k:'n',ph:'12'},{l:'Years (t)',k:'t',ph:'5'}],fn(v){const A=+v.p*Math.pow(1+((+v.r/100)/+v.n),+v.n*+v.t);return{val:`A = ${A.toFixed(2)}`,det:`Amount = ${A.toFixed(2)}\nInterest earned = ${(A-+v.p).toFixed(2)}`}},fmla:'A = P(1+r/n)^(nt)'},
+  {id:'emi',name:'EMI Calculator',icon:'🏦',cat:'finance',desc:'Monthly loan installment',fields:[{l:'Loan amount (P)',k:'p',ph:'500000'},{l:'Annual rate % (r)',k:'r',ph:'10'},{l:'Tenure (months)',k:'n',ph:'60'}],fn(v){const r=+v.r/100/12,n=+v.n,p=+v.p;const emi=p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);return{val:`EMI = ${emi.toFixed(2)}`,det:`Monthly EMI = ${emi.toFixed(2)}\nTotal Payment = ${(emi*n).toFixed(2)}\nTotal Interest = ${(emi*n-p).toFixed(2)}`}},fmla:'EMI = P·r·(1+r)ⁿ / ((1+r)ⁿ−1)'},
+  {id:'roi',name:'ROI Calculator',icon:'📊',cat:'finance',desc:'Return on Investment',fields:[{l:'Net profit',k:'p',ph:'5000'},{l:'Cost of investment',k:'c',ph:'20000'}],fn(v){const r=(+v.p/+v.c)*100;return{val:`${r.toFixed(4)}%`,det:`ROI = (${v.p}/${v.c})×100 = ${r.toFixed(4)}%`}},fmla:'ROI = (Profit/Cost) × 100'},
+  {id:'bmi',name:'BMI Calculator',icon:'⚖',cat:'finance',desc:'Body Mass Index',fields:[{l:'Weight (kg)',k:'w',ph:'70'},{l:'Height (m)',k:'h',ph:'1.75'}],fn(v){const b=+v.w/Number(v.h)**2;const cat=b<18.5?'Underweight':b<25?'Normal':b<30?'Overweight':'Obese';return{val:`BMI = ${b.toFixed(2)}`,det:`BMI = ${b.toFixed(2)}\nCategory: ${cat}`}},fmla:'BMI = kg / m²'},
+  {id:'bmr',name:'BMR (Calories)',icon:'🔥',cat:'finance',desc:'Basal Metabolic Rate',fields:[{l:'Weight (kg)',k:'w',ph:'70'},{l:'Height (cm)',k:'h',ph:'175'},{l:'Age (years)',k:'a',ph:'25'},{l:'Sex (m/f)',k:'s',ph:'m'}],fn(v){const b=v.s.toLowerCase()==='m'?88.362+(13.397*+v.w)+(4.799*+v.h)-(5.677*+v.a):447.593+(9.247*+v.w)+(3.098*+v.h)-(4.330*+v.a);return{val:`${b.toFixed(2)} kcal/day`,det:`BMR = ${b.toFixed(2)} kcal/day (Mifflin-St Jeor)`}},fmla:'Mifflin-St Jeor equation'},
+  {id:'age',name:'Age Calculator',icon:'🎂',cat:'finance',desc:'Exact age from birthdate',fields:[{l:'Birth year',k:'y',ph:'1995'},{l:'Birth month',k:'m',ph:'6'},{l:'Birth day',k:'d',ph:'15'}],fn(v){const now=new Date(),born=new Date(+v.y,+v.m-1,+v.d);let age=now.getFullYear()-born.getFullYear();if(now<new Date(now.getFullYear(),+v.m-1,+v.d))age--;const days=Math.floor((now-born)/(1000*60*60*24));return{val:`${age} years old`,det:`Age: ${age} years\nDays lived: ${days.toLocaleString()}`}},fmla:'Current year − Birth year (adjusted)'},
+  {id:'tip',name:'Tip Calculator',icon:'🍽',cat:'finance',desc:'Split bill & tip',fields:[{l:'Bill amount',k:'b',ph:'80'},{l:'Tip %',k:'t',ph:'15'},{l:'People',k:'p',ph:'4'}],fn(v){const tip=+v.b*+v.t/100,total=+v.b+tip,per=total/+v.p;return{val:`${per.toFixed(2)} per person`,det:`Tip: ${tip.toFixed(2)}\nTotal: ${total.toFixed(2)}\nPer person: ${per.toFixed(2)}`}},fmla:'Tip = Bill × Rate%'},
+  {id:'fuel',name:'Fuel Cost',icon:'⛽',cat:'finance',desc:'Trip fuel cost',fields:[{l:'Distance (km)',k:'d',ph:'200'},{l:'Fuel efficiency (km/L)',k:'e',ph:'15'},{l:'Fuel price (per L)',k:'p',ph:'100'}],fn(v){const liters=+v.d/+v.e,cost=liters*+v.p;return{val:`${cost.toFixed(2)}`,det:`Fuel needed: ${liters.toFixed(4)} L\nTotal cost: ${cost.toFixed(2)}`}},fmla:'Cost = (distance/efficiency) × price'},
+  {id:'inflation',name:'Inflation Calculator',icon:'📉',cat:'finance',desc:'Future value accounting for inflation',fields:[{l:'Current amount',k:'a',ph:'1000'},{l:'Inflation rate %',k:'r',ph:'6'},{l:'Years',k:'t',ph:'10'}],fn(v){const fv=+v.a*Math.pow(1-+v.r/100,+v.t);return{val:`Real value = ${fv.toFixed(2)}`,det:`After ${v.t} years at ${v.r}% inflation\nPurchasing power = ${fv.toFixed(2)}`}},fmla:'FV = PV×(1−r)^t'},
+  {id:'tax',name:'Tax Calculator',icon:'🧾',cat:'finance',desc:'Tax amount & net',fields:[{l:'Gross amount',k:'a',ph:'50000'},{l:'Tax rate %',k:'r',ph:'30'}],fn(v){const tax=+v.a*+v.r/100,net=+v.a-tax;return{val:`Tax = ${tax.toFixed(2)}`,det:`Gross: ${v.a}\nTax (${v.r}%): ${tax.toFixed(2)}\nNet: ${net.toFixed(2)}`}},fmla:'Tax = Amount × Rate%'},
+  {id:'water',name:'Water Intake',icon:'💧',cat:'finance',desc:'Daily water needs',fields:[{l:'Weight (kg)',k:'w',ph:'70'},{l:'Activity level (1-3)',k:'a',ph:'2'}],fn(v){const base=+v.w*35,adj=base+(+v.a-1)*500;return{val:`${adj.toFixed(0)} ml/day`,det:`Base: ${base} ml\nAdjusted for activity: ${adj.toFixed(0)} ml ≈ ${(adj/250).toFixed(1)} glasses`}},fmla:'35ml/kg + activity adjustment'},
+  {id:'heartrate',name:'Heart Rate Zones',icon:'❤',cat:'finance',desc:'Max HR & training zones',fields:[{l:'Age (years)',k:'a',ph:'30'}],fn(v){const max=220-+v.a;return{val:`Max HR = ${max} bpm`,det:`Max HR = ${max}\nFat burn (60-70%) = ${Math.round(max*0.6)}–${Math.round(max*0.7)} bpm\nCardio (70-85%) = ${Math.round(max*0.7)}–${Math.round(max*0.85)} bpm`}},fmla:'Max HR = 220 − age'},
+  {id:'datediff',name:'Date Difference',icon:'📅',cat:'finance',desc:'Days between two dates',fields:[{l:'Start date (YYYY-MM-DD)',k:'s',ph:'2024-01-01'},{l:'End date (YYYY-MM-DD)',k:'e',ph:'2024-12-31'}],fn(v){const d1=new Date(v.s),d2=new Date(v.e),diff=Math.abs(d2-d1);const days=Math.floor(diff/(1000*60*60*24));return{val:`${days} days`,det:`${days} days\n${Math.floor(days/7)} weeks\n${(days/30.44).toFixed(2)} months`}},fmla:'|Date₂ − Date₁| in ms / 86,400,000'},
+  {id:'savgoal',name:'Savings Goal',icon:'🏆',cat:'finance',desc:'Monthly savings needed',fields:[{l:'Goal amount',k:'g',ph:'100000'},{l:'Current savings',k:'s',ph:'10000'},{l:'Months to goal',k:'m',ph:'24'}],fn(v){const needed=(+v.g-+v.s)/+v.m;return{val:`${needed.toFixed(2)}/month`,det:`Need: ${(+v.g-+v.s).toFixed(2)}\nMonthly savings needed: ${needed.toFixed(2)}`}},fmla:'Monthly = (Goal − Saved) / Months'},
+];
+
+// ── RENDER ──────────────────────────────────────────────────────
+const grid = document.getElementById('calcGrid');
+let activecat = 'all', searchQ = '';
+
+function getIcon(c) {
+  const icons = {math:'🔢',stats:'📊',geo:'📐',physics:'⚙️',chem:'⚗️',comp:'💻',finance:'💰'};
+  return icons[c]||'📋';
+}
+
+function renderGrid() {
+  const filtered = calcs.filter(c => {
+    const matchCat = activecat === 'all' || c.cat === activecat;
+    const q = searchQ.toLowerCase();
+    const matchSearch = !q || c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.cat.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results"><span class="num">0</span><br>No calculators found.<br><small>Try a different search term.</small></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(c => `
+    <div class="calc-card" data-id="${c.id}" tabindex="0" role="button" aria-label="Open ${c.name}">
+      <div class="calc-card-icon">${c.icon}</div>
+      <div class="calc-card-name">${c.name}</div>
+      <div class="calc-card-desc">${c.desc}</div>
+      <div class="calc-card-arrow">Open calculator →</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.calc-card').forEach(el => {
+    el.addEventListener('click', () => openModal(el.dataset.id));
+    el.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') openModal(el.dataset.id); });
+  });
+}
+
+// ── MODAL ──────────────────────────────────────────────────────
+function openModal(id) {
+  const c = calcs.find(x => x.id === id);
+  if (!c) return;
+  const catLabels = {math:'Mathematics',stats:'Statistics & Probability',geo:'Geometry & Mensuration',physics:'Physics',chem:'Chemistry',comp:'Computer Science',finance:'Finance & Life'};
+  document.getElementById('mIcon').textContent = c.icon;
+  document.getElementById('mTitle').textContent = c.name;
+  document.getElementById('mCat').textContent = catLabels[c.cat] || c.cat;
+  document.getElementById('mBody').innerHTML = buildForm(c);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    const first = document.querySelector('.form-input, .form-select');
+    if (first) first.focus();
+  }, 100);
+  document.getElementById('calcSubmit').addEventListener('click', () => runCalc(c));
+}
+
+function buildForm(c) {
+  const fields = c.fields.map(f => `
+    <div class="form-group">
+      <label class="form-label">${f.l}</label>
+      <input class="form-input" data-key="${f.k}" type="text" placeholder="${f.ph||''}" autocomplete="off">
+    </div>
+  `).join('');
+  return `
+    <div class="calc-form">
+      <div style="background:var(--bg-soft);padding:12px 16px;border-radius:8px;font-family:var(--font-mono);font-size:0.78rem;color:var(--text-muted)">Formula: ${c.fmla}</div>
+      ${fields}
+      <button class="calc-btn" id="calcSubmit">Calculate</button>
+      <div class="calc-result" id="calcResult">
+        <div class="result-label">Result</div>
+        <div class="result-value" id="resultVal"></div>
+        <div class="result-detail" id="resultDet"></div>
+        <button onclick="copyResult()" style="margin-top:12px;background:none;border:1px solid var(--border-light);padding:6px 16px;border-radius:6px;font-family:var(--font-body);font-size:0.78rem;cursor:pointer;color:var(--text-muted)">Copy Result</button>
+      </div>
+    </div>
+  `;
+}
+
+function runCalc(c) {
+  const inputs = document.querySelectorAll('.form-input');
+  const vals = {};
+  inputs.forEach(inp => { vals[inp.dataset.key] = inp.value; });
+  try {
+    const res = c.fn(vals);
+    if (!res) { showResult('Error', 'Invalid input — please check values.'); return; }
+    showResult(res.val, res.det || '');
+  } catch(e) {
+    showResult('Error', 'Calculation failed. Check inputs.');
+  }
+}
+
+function showResult(val, det) {
+  const r = document.getElementById('calcResult');
+  document.getElementById('resultVal').textContent = val;
+  document.getElementById('resultDet').textContent = det;
+  r.classList.add('show');
+}
+
+function copyResult() {
+  const v = document.getElementById('resultVal').textContent;
+  navigator.clipboard.writeText(v).then(() => showToast()).catch(()=>{});
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+// ── TABS ──────────────────────────────────────────────────────
+document.getElementById('catTabs').addEventListener('click', e => {
+  const tab = e.target.closest('.cat-tab');
+  if (!tab) return;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  activecat = tab.dataset.cat;
+  renderGrid();
+  setTimeout(() => grid.scrollIntoView({behavior:'smooth',block:'start'}), 50);
+});
+
+// ── SEARCH ──────────────────────────────────────────────────────
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', e => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchQ = e.target.value;
+    if (searchQ) {
+      activecat = 'all';
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector('.cat-tab').classList.add('active');
+    }
+    renderGrid();
+  }, 200);
+});
+
+// ── SCROLL ANIMATIONS ──────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.step').forEach(el => observer.observe(el));
+
+// ── HEADER SCROLL ──────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const h = document.getElementById('header');
+  h.style.boxShadow = window.scrollY > 20 ? '0 2px 20px rgba(0,0,0,0.06)' : 'none';
+});
+
+// ── MENU ──────────────────────────────────────────────────────
+document.getElementById('menuBtn').addEventListener('click', () => {
+  const nav = document.getElementById('nav');
+  nav.classList.toggle('open');
+});
+
+// ── FAQ ──────────────────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const idx = btn.dataset.faq;
+    const ans = document.getElementById(`faq-${idx}`);
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+    if (!isOpen) { btn.classList.add('open'); ans.classList.add('open'); }
+  });
+});
+
+// ── SMOOTH SCROLL for anchor links ──────────────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+    document.getElementById('nav').classList.remove('open');
+  });
+});
+
+// ── INIT ──────────────────────────────────────────────────────
+renderGrid();
+
+// Animate counters
+function animateCounter(el, target, duration=1200) {
+  let start = 0;
+  const step = timestamp => {
+    if (!step.start) step.start = timestamp;
+    const progress = Math.min((timestamp - step.start) / duration, 1);
+    el.textContent = Math.floor(progress * target) + (el.dataset.suffix||'');
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const heroObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      document.querySelectorAll('.hero-stat .num').forEach(el => {
+        const t = parseInt(el.textContent);
+        if(t) { el.dataset.suffix = el.textContent.replace(t,''); animateCounter(el, t); }
+      });
+      heroObs.disconnect();
+    }
+  });
+}, {threshold:0.5});
+const heroStats = document.querySelector('.hero-stats');
+if(heroStats) heroObs.observe(heroStats);
+</script>
+
+<!-- ══════════════════════════════════════════════
+     PAGE OVERLAY (Privacy / Terms / Feedback)
+══════════════════════════════════════════════ -->
+<div class="page-overlay" id="pageOverlay">
+  <div class="page-panel" id="pagePanel">
+    <div class="page-panel-header">
+      <div class="page-panel-title" id="pagePanelTitle"></div>
+      <button class="page-close" id="pageClose" aria-label="Close">&#x2715;</button>
+    </div>
+    <div class="page-panel-body" id="pagePanelBody"></div>
+  </div>
+</div>
+
+<style>
+.page-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity 0.3s cubic-bezier(0.4,0,0.2,1);}
+.page-overlay.open{opacity:1;pointer-events:all;}
+.page-panel{background:var(--bg);width:min(720px,100vw);height:100vh;overflow-y:auto;transform:translateX(40px);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,0.12);}
+.page-overlay.open .page-panel{transform:translateX(0);}
+.page-panel-header{position:sticky;top:0;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-light);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
+.page-panel-title{font-size:1.1rem;font-weight:800;color:var(--primary);letter-spacing:-0.5px;}
+.page-close{width:38px;height:38px;background:var(--bg-soft);border:none;border-radius:8px;cursor:pointer;font-size:1rem;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;}
+.page-close:hover{background:var(--primary);color:white;}
+.page-panel-body{padding:48px 40px 80px;flex:1;}
+.page-content h2{font-size:1.4rem;font-weight:800;color:var(--primary);margin:44px 0 14px;letter-spacing:-0.5px;}
+.page-content h2:first-child{margin-top:0;}
+.page-content h3{font-size:0.95rem;font-weight:700;color:var(--text-sub);margin:26px 0 10px;}
+.page-content p{font-size:0.875rem;color:var(--text-muted);line-height:1.85;margin-bottom:14px;}
+.page-content ul{margin:0 0 16px 0;padding-left:20px;}
+.page-content ul li{font-size:0.875rem;color:var(--text-muted);line-height:1.8;margin-bottom:6px;}
+.page-content .highlight-box{background:var(--bg-soft);border-left:3px solid var(--primary);padding:16px 20px;border-radius:0 8px 8px 0;margin:20px 0;}
+.page-content .highlight-box p{margin:0;font-weight:600;color:var(--text-sub);font-size:0.875rem;}
+.page-content .meta{font-size:0.78rem;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border-light);}
+.page-content hr{border:none;border-top:1px solid var(--border-light);margin:32px 0;}
+.fb-form{display:flex;flex-direction:column;gap:20px;margin-top:8px;}
+.fb-group{display:flex;flex-direction:column;gap:7px;}
+.fb-label{font-size:0.78rem;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.5px;}
+.fb-input,.fb-select,.fb-textarea{padding:12px 16px;border:1.5px solid var(--border-light);border-radius:8px;font-family:var(--font-body);font-size:0.9rem;color:var(--text);background:var(--bg-soft);outline:none;transition:var(--transition);width:100%;}
+.fb-input:focus,.fb-select:focus,.fb-textarea:focus{border-color:var(--primary);background:white;}
+.fb-textarea{resize:vertical;min-height:120px;}
+.fb-select{cursor:pointer;}
+.fb-stars{display:flex;gap:8px;}
+.fb-stars button{font-size:1.6rem;background:none;border:none;cursor:pointer;opacity:0.3;transition:var(--transition);padding:0;line-height:1;}
+.fb-stars button.lit{opacity:1;}
+.fb-submit{background:var(--primary);color:white;padding:14px 32px;border:none;border-radius:10px;font-family:var(--font-body);font-size:0.9rem;font-weight:700;cursor:pointer;transition:var(--transition);align-self:flex-start;}
+.fb-submit:hover{background:var(--primary-h);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.15);}
+.fb-success{background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:28px;text-align:center;display:none;}
+.fb-success.show{display:block;animation:fadeUp 0.4s ease;}
+.fb-success .check{font-size:2.5rem;margin-bottom:12px;}
+.fb-success h3{color:#15803d;font-size:1.1rem;margin-bottom:8px;}
+.fb-success p{color:#166534;font-size:0.875rem;margin:0;}
+.fb-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.char-count{font-size:0.72rem;color:var(--text-muted);text-align:right;font-family:var(--font-mono);}
+@media(max-width:600px){.page-panel-body{padding:28px 20px 60px;}.page-panel-header{padding:16px 20px;}.fb-row{grid-template-columns:1fr;}}
+</style>
+
+<script>
+const PAGES = {
+  privacy: {
+    title: '\u{1F512}  Privacy Policy',
+    body: `<div class="page-content">
+<p class="meta">Last updated: February 18, 2026 &nbsp;&middot;&nbsp; Effective immediately</p>
+<div class="highlight-box"><p>CalcVerse is committed to your privacy. We do not collect, store, or share any personal data. All calculations happen entirely in your browser.</p></div>
+<h2>1. Overview</h2>
+<p>CalcVerse provides a free, browser-based calculator platform. This Privacy Policy explains our commitment to <strong>not collecting any data about you</strong>. We believe privacy is a fundamental right, and we have designed CalcVerse from the ground up to respect yours.</p>
+<h2>2. Information We Do Not Collect</h2>
+<p>We want to be crystal clear about what we do <em>not</em> do:</p>
+<ul>
+<li>We do <strong>not</strong> collect your name, email, or any personal identifiers</li>
+<li>We do <strong>not</strong> store any values you enter into calculators</li>
+<li>We do <strong>not</strong> run server-side analytics or tracking scripts</li>
+<li>We do <strong>not</strong> use cookies for tracking or profiling purposes</li>
+<li>We do <strong>not</strong> sell or share data with third parties</li>
+<li>We do <strong>not</strong> require account creation or login of any kind</li>
+</ul>
+<h2>3. How CalcVerse Works</h2>
+<p>Every calculator runs entirely in your web browser using JavaScript. When you enter numbers and click "Calculate", the computation happens locally on your device. No data is transmitted to any server. Your inputs exist only in your browser's memory and are discarded when you close the tab or refresh.</p>
+<p>This is a deliberate architectural choice. Tools should work <em>for</em> you, not harvest from you.</p>
+<h2>4. Fonts and External Resources</h2>
+<p>CalcVerse loads fonts (Poppins and JetBrains Mono) from Google Fonts. This is the only external resource loaded. When your browser fetches these fonts, Google's servers may log your IP address as part of standard web server logging. This is governed by Google's own Privacy Policy and is outside our control. You can block this with a browser extension.</p>
+<h2>5. Local Storage</h2>
+<p>CalcVerse does not use localStorage, sessionStorage, IndexedDB, or any persistent browser storage. Nothing about your session is saved between visits.</p>
+<h2>6. Children's Privacy</h2>
+<p>CalcVerse is suitable for users of all ages, including children. Since we collect no personal information from anyone, there are no special provisions needed for users under 13. Parents can be fully confident their children's data is never collected.</p>
+<h2>7. Changes to This Policy</h2>
+<p>If we update this Privacy Policy, we will revise the "Last updated" date at the top. Since we have no way to contact users (we don't collect emails), we encourage you to review this page periodically.</p>
+<h2>8. Contact</h2>
+<p>Questions? Use our <a href="#" onclick="openPage('feedback');return false;">Feedback form</a>. We read every message.</p>
+</div>`
+  },
+
+  terms: {
+    title: '\u{1F4C4}  Terms of Use',
+    body: `<div class="page-content">
+<p class="meta">Last updated: February 18, 2026 &nbsp;&middot;&nbsp; Please read before using CalcVerse</p>
+<div class="highlight-box"><p>By using CalcVerse, you agree to these terms. Written in plain English, not legalese.</p></div>
+<h2>1. Acceptance of Terms</h2>
+<p>By accessing or using CalcVerse, you agree to be bound by these Terms of Use. If you do not agree, please do not use the service. These terms apply to all visitors and users.</p>
+<h2>2. Description of Service</h2>
+<p>CalcVerse is a free, browser-based platform providing 220+ calculators across mathematics, statistics, geometry, physics, chemistry, computer science, and everyday life. No registration, subscription, or payment is required.</p>
+<h2>3. Acceptable Use</h2>
+<p>You may use CalcVerse freely for personal, educational, and professional purposes. You agree <strong>not</strong> to:</p>
+<ul>
+<li>Attempt to decompile or extract source code for commercial redistribution without permission</li>
+<li>Use automated bots or scrapers to access the service at scale</li>
+<li>Introduce malicious code or scripts into the platform</li>
+<li>Misrepresent the source or authorship of CalcVerse</li>
+<li>Use the platform for any illegal or harmful purpose</li>
+</ul>
+<h2>4. Accuracy of Calculations</h2>
+<p>CalcVerse strives for accuracy and validates all formulas against academic and engineering standards. However, <strong>results should not be the sole basis for critical decisions</strong> including medical diagnosis, structural engineering, financial investment, or legal matters — always verify with a qualified professional.</p>
+<p>We are not liable for errors resulting from incorrect inputs or misapplication of a calculator.</p>
+<h2>5. Intellectual Property</h2>
+<p>The CalcVerse interface, design system, branding, and custom code are the intellectual property of CalcVerse and its creators. Mathematical formulas are in the public domain. You are welcome to cite CalcVerse in academic work.</p>
+<h2>6. Disclaimer of Warranties</h2>
+<p>CalcVerse is provided <strong>"as is"</strong> without any warranty of any kind. We do not warrant that the service will be uninterrupted or error-free. We disclaim all implied warranties, including merchantability and fitness for a particular purpose.</p>
+<h2>7. Limitation of Liability</h2>
+<p>To the fullest extent permitted by law, CalcVerse and its creators shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the service.</p>
+<h2>8. Third-Party Links</h2>
+<p>CalcVerse may contain links to external websites. We are not responsible for the content or privacy practices of those sites. Accessing third-party links is at your own risk.</p>
+<h2>9. Modifications</h2>
+<p>We reserve the right to modify these Terms at any time. Continued use of CalcVerse after changes constitutes your acceptance. The "Last updated" date reflects the most recent revision.</p>
+<h2>10. Governing Law</h2>
+<p>These Terms are governed by applicable law. Disputes shall be resolved through good-faith negotiation before pursuing formal legal remedies.</p>
+<h2>11. Contact</h2>
+<p>Questions about these Terms? Use our <a href="#" onclick="openPage('feedback');return false;">Feedback form</a>.</p>
+</div>`
+  },
+
+  feedback: {
+    title: '\u{1F4AC}  Feedback & Requests',
+    body: `<div class="page-content">
+<h2>We would love to hear from you</h2>
+<p>Found a bug? Have a calculator idea? Want to say hi? Every message is read by a real human. Use the form below and we will get back to you as soon as possible.</p>
+<div id="fbSuccess" class="fb-success">
+  <div class="check">&#x2705;</div>
+  <h3>Message received!</h3>
+  <p>Thanks for reaching out. We will review your feedback shortly. If you left an email, expect a reply within 2-3 business days.</p>
+</div>
+<form class="fb-form" id="fbForm" onsubmit="submitFeedback(event)">
+  <div class="fb-row">
+    <div class="fb-group">
+      <label class="fb-label">Your Name</label>
+      <input class="fb-input" type="text" placeholder="Alex Johnson" id="fbName">
+    </div>
+    <div class="fb-group">
+      <label class="fb-label">Email (optional)</label>
+      <input class="fb-input" type="email" placeholder="alex@example.com" id="fbEmail">
+    </div>
+  </div>
+  <div class="fb-group">
+    <label class="fb-label">Type of Feedback</label>
+    <select class="fb-select" id="fbType" onchange="toggleCalcField(this)">
+      <option value="">Select a category</option>
+      <option value="bug">&#x1F41B; Bug Report</option>
+      <option value="request">&#x2728; New Calculator Request</option>
+      <option value="formula">&#x1F522; Formula Error</option>
+      <option value="design">&#x1F3A8; Design / UX Suggestion</option>
+      <option value="praise">&#x2764; General Praise</option>
+      <option value="other">&#x1F4AC; Other</option>
+    </select>
+  </div>
+  <div class="fb-group" id="calcNameGroup" style="display:none;">
+    <label class="fb-label">Calculator Name (if applicable)</label>
+    <input class="fb-input" type="text" placeholder="e.g. Quadratic Solver" id="fbCalcName">
+  </div>
+  <div class="fb-group">
+    <label class="fb-label">Subject</label>
+    <input class="fb-input" type="text" placeholder="Brief summary of your message" id="fbSubject" required>
+  </div>
+  <div class="fb-group">
+    <label class="fb-label">Message</label>
+    <textarea class="fb-textarea" placeholder="Tell us everything. The more detail, the better we can help." id="fbMessage" required maxlength="2000" oninput="updateCharCount(this)"></textarea>
+    <span class="char-count" id="charCount">0 / 2000</span>
+  </div>
+  <div class="fb-group">
+    <label class="fb-label">Overall Experience</label>
+    <div class="fb-stars" id="fbStars">
+      <button type="button" onclick="setStar(1)" title="Poor">&#x2B50;</button>
+      <button type="button" onclick="setStar(2)" title="Fair">&#x2B50;</button>
+      <button type="button" onclick="setStar(3)" title="Good">&#x2B50;</button>
+      <button type="button" onclick="setStar(4)" title="Great">&#x2B50;</button>
+      <button type="button" onclick="setStar(5)" title="Excellent">&#x2B50;</button>
+    </div>
+  </div>
+  <div class="fb-group">
+    <label class="fb-label">How did you find CalcVerse?</label>
+    <select class="fb-select" id="fbSource">
+      <option value="">Optional</option>
+      <option>Google / Search Engine</option>
+      <option>Social Media</option>
+      <option>Friend / Colleague</option>
+      <option>School / University</option>
+      <option>Direct URL</option>
+      <option>Other</option>
+    </select>
+  </div>
+  <button type="submit" class="fb-submit">Send Feedback &#x2192;</button>
+</form>
+</div>`
+  }
+};
+
+let currentStar = 0;
+
+function openPage(id) {
+  const p = PAGES[id];
+  if (!p) return;
+  document.getElementById('pagePanelTitle').innerHTML = p.title;
+  document.getElementById('pagePanelBody').innerHTML = p.body;
+  document.getElementById('pageOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('pagePanel').scrollTop = 0;
+  currentStar = 0;
+}
+
+function closePage() {
+  document.getElementById('pageOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleCalcField(sel) {
+  const g = document.getElementById('calcNameGroup');
+  if (!g) return;
+  const show = ['bug','request','formula'].includes(sel.value);
+  g.style.display = show ? 'flex' : 'none';
+}
+
+function setStar(n) {
+  currentStar = n;
+  const btns = document.querySelectorAll('#fbStars button');
+  btns.forEach(function(b, i) {
+    b.classList.toggle('lit', i < n);
+    b.style.opacity = i < n ? '1' : '0.3';
+  });
+}
+
+function updateCharCount(el) {
+  const c = document.getElementById('charCount');
+  if (c) c.textContent = el.value.length + ' / 2000';
+}
+
+function submitFeedback(e) {
+  e.preventDefault();
+  var form = document.getElementById('fbForm');
+  var success = document.getElementById('fbSuccess');
+  if (form) form.style.display = 'none';
+  if (success) { success.style.display = 'block'; success.classList.add('show'); }
+}
+
+document.getElementById('pageClose').addEventListener('click', closePage);
+document.getElementById('pageOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePage();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('pageOverlay').classList.contains('open')) closePage();
+});
+</script>
+
+</body>
+</html>
