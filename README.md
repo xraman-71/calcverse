@@ -1,3 +1,5 @@
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://xraman-71.github.io/calcverse/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/xraman-71)
 
 
 # 🔢 Mega Calculator Collection (220+ Calculators)
